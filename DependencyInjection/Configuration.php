@@ -63,7 +63,7 @@ class Configuration implements ConfigurationInterface
             'adapter' => 'native'
         );
         $builder
-            ->arrayNode('serializers')
+            ->arrayNode('serializers')->info('Native serializer with name "default" is added')
                 ->useAttributeAsKey('name')
                 ->addDefaultChildrenIfNoneSet('default')
                 ->prototype('array')
@@ -106,7 +106,7 @@ class Configuration implements ConfigurationInterface
             )
         );
         $builder
-            ->arrayNode('routers')
+            ->arrayNode('routers')->info('Pattern router with name "default" is added')
                 ->useAttributeAsKey('name')
                 ->addDefaultChildrenIfNoneSet('default')
                 ->prototype('array')
@@ -163,7 +163,7 @@ class Configuration implements ConfigurationInterface
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->scalarNode('connection')->defaultValue('default')->end()
-                                ->scalarNode('exchange')->defaultNull()->end()
+                                ->scalarNode('exchange')->defaultNull()->info('Default exchange name is a publisher name')->end()
                                 ->scalarNode('router')->defaultValue('default')->end()
                                 ->scalarNode('converter')->defaultValue('default')->end()
                                 ->booleanNode('persistent')->defaultTrue()->end()
@@ -213,7 +213,7 @@ class Configuration implements ConfigurationInterface
                             ->children()
                                 ->scalarNode('connection')->defaultValue('default')->end()
                                 ->scalarNode('converter')->defaultValue('default')->end()
-                                ->scalarNode('queue')->defaultNull()->end()
+                                ->scalarNode('queue')->defaultNull()->info('Default queue name is a consumer name')->end()
                             ->end()
                         ->end()
                     ->end()
@@ -266,7 +266,7 @@ class Configuration implements ConfigurationInterface
                             ->thenInvalid('Unknown "%s" driver. Valid drivers: "amqplib", "pecl"')
                         ->end()
                     ->end()
-                    ->arrayNode('connections')
+                    ->arrayNode('connections')->info('Connection with name "default" is added')
                         ->useAttributeAsKey('name')
                         ->addDefaultChildrenIfNoneSet('default')
                         ->prototype('array')
@@ -291,7 +291,7 @@ class Configuration implements ConfigurationInterface
                             })
                         ->end()
                     ->end()
-                    ->arrayNode('converters')
+                    ->arrayNode('converters')->info('Serialize converter with name "default" is added')
                         ->useAttributeAsKey('name')
                         ->addDefaultChildrenIfNoneSet('default')
                         ->prototype('array')

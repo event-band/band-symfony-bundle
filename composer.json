@@ -1,0 +1,40 @@
+{
+    "name": "event-band/symfony-bundle",
+    "description": "Symfony Bundle for EventBand",
+    "keywords": ["event", "dispatcher", "queue", "async", "asynchronous", "message", "bundle", "amqp"],
+    "homepage": "http://github.com/chEbba/EventBandSymfonyBundle",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kirill chEbba Chebunin",
+            "email": "iam@chebba.org",
+            "homepage": "http://github.com/chEbba"
+        }
+    ],
+
+    "autoload": {
+        "psr-0": { "EventBand\\Bundle": "" }
+    },
+    "target-dir": "EventBand/Bundle",
+
+    "require": {
+        "php": ">=5.4.1",
+        "symfony/framework-bundle": "2.*, >=2.1",
+        "event-band/band-framework": "dev-master",
+        "event-band/symfony-adapter": "dev-master"
+    },
+    "require-dev": {
+        "event-band/symfony-adapter": "dev-master",
+        "che/console-signals": "dev-master",
+        "event-band/amqplib-transport": "dev-master",
+        "event-band/jms-serializer": "dev-master",
+        "jms/serializer-bundle": "dev-master"
+    },
+    "suggest": {
+        "event-band/amqplib-transport": "Use amqp transport with amqp-lib",
+        "event-band/pecl-amqp-transport": "Use amqp transport with pecl amqp extension",
+        "event-band/jms-serializer": "Serialize events with jms (jms/serializer-bundle is required)",
+        "jms/serializer-bundle": "Required to use with event-band/jms-serializer"
+    }
+}

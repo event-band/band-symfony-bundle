@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="event_band.transport.amqp.definition"
+                class="EventBand\Transport\Amqp\Definition\AmqpBuilder"
+                abstract="true">
+        </service>
+        <service id="event_band.transport.amqp.connection_definition"
+                class="EventBand\Transport\Amqp\Definition\ConnectionDefinition"
+                abstract="true" public="false"
+                factory-method="connection"><!-- factory-service should be added -->
+        </service>
+
+        <service id="event_band.transport.amqp.converter.serialize"
+                class="EventBand\Transport\Amqp\Driver\MessageSerializeConverter"
+                abstract="true" public="false">
+            <argument /> <!-- serializer -->
+            <!--<argument /> &lt;!&ndash; prototype &ndash;&gt;-->
+        </service>
+
+        <service id="event_band.transport.amqp.publisher"
+                class="EventBand\Transport\Amqp\AmqpPublisher"
+                abstract="true">
+            <argument /> <!-- driver -->
+            <argument /> <!-- converter -->
+            <argument /> <!-- exchange -->
+            <argument /> <!-- router -->
+            <argument /> <!-- persistent -->
+            <argument /> <!-- mandatory -->
+            <argument /> <!-- immediate -->
+        </service>
+
+        <service id="event_band.transport.amqp.consumer"
+                class="EventBand\Transport\Amqp\AmqpConsumer"
+                abstract="true">
+            <argument /> <!-- driver -->
+            <argument /> <!-- converter -->
+            <argument /> <!-- queue -->
+        </service>
+
+    </services>
+</container>

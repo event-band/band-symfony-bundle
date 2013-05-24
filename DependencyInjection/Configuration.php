@@ -260,7 +260,7 @@ class Configuration implements ConfigurationInterface
         $builder
             ->arrayNode('amqp')
                 ->children()
-                    ->scalarNode('driver')->defaultValue('amqp')
+                    ->scalarNode('driver')->defaultValue('amqplib')
                         ->validate()
                             ->ifNotInArray(array('amqplib', 'pecl'))
                             ->thenInvalid('Unknown "%s" driver. Valid drivers: "amqplib", "pecl"')

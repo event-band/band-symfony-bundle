@@ -9,6 +9,8 @@
 
 namespace EventBand\Bundle\DependencyInjection;
 
+use EventBand\Transport\Amqp\Definition\ExchangeDefinition;
+use EventBand\Transport\Amqp\Definition\ExchangeType;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -154,7 +156,7 @@ class Configuration implements ConfigurationInterface
                             ->prototype('scalar')->end()
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(function ($v) { return array($v); })
+                                ->then(function ($v) { return [$v]; })
                             ->end()
                         ->end()
                         ->booleanNode('propagation')->defaultTrue()->end()
@@ -252,7 +254,9 @@ class Configuration implements ConfigurationInterface
             'port' => '5672',
             'virtual_host' => '/',
             'user' => 'guest',
-            'password' => 'guest'
+            'password' => 'guest',
+            'exchanges' => [],
+            'queues' => []
         ];
         $defaultConverter = [
             'type' => 'serialize'
@@ -262,7 +266,7 @@ class Configuration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('driver')->defaultValue('amqplib')
                         ->validate()
-                            ->ifNotInArray(array('amqplib', 'pecl'))
+                            ->ifNotInArray(['amqplib', 'pecl'])
                             ->thenInvalid('Unknown "%s" driver. Valid drivers: "amqplib", "pecl"')
                         ->end()
                     ->end()
@@ -276,6 +280,36 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('virtual_host')->defaultValue($defaultConnection['virtual_host'])->end()
                                 ->scalarNode('user')->defaultValue($defaultConnection['user'])->end()
                                 ->scalarNode('password')->defaultValue($defaultConnection['password'])->end()
+                                ->arrayNode('exchanges')
+                                    ->canNotBeEmpty()->defaultValue([])
+                                    ->canBeUnset(false)
+                                    ->useAttributeAsKey('name')
+                                    ->prototype('array')
+                                        ->children()
+                                            ->scalarNode('type')->defaultValue(ExchangeType::TOPIC)
+                                                ->validate()
+                                                    ->ifNotInArray(ExchangeType::getTypes())
+                                                    ->thenInvalid(sprintf('Unknown "%s" exchange. Valid drivers: %s', '%s', implode(', ', ExchangeType::getTypes())))
+                                                ->end()
+                                            ->end()
+                                            ->booleanNode('transient')->defaultFalse()->end()
+                                            ->booleanNode('auto_delete')->defaultFalse()->end()
+                                            ->booleanNode('internal')->defaultFalse()->end()
+                                        ->end()
+                                        ->append($this->amqpBindingNode())
+                                    ->end()
+                                ->end()
+                                ->arrayNode('queues')
+                                    ->useAttributeAsKey('name')
+                                    ->prototype('array')
+                                        ->children()
+                                            ->booleanNode('transient')->defaultTrue()->end()
+                                            ->booleanNode('auto_delete')->defaultFalse()->end()
+                                            ->booleanNode('exclusive')->defaultFalse()->end()
+                                        ->end()
+                                        ->append($this->amqpBindingNode())
+                                    ->end()
+                                ->end()
                             ->end()
                         ->end()
                         ->validate()
@@ -284,7 +318,6 @@ class Configuration implements ConfigurationInterface
                             ->then(function ($connections) use ($defaultConnection) {
                                 if (!isset($connections['default'])) {
                                     $connections['default'] = $defaultConnection;
-
                                 }
 
                                 return $connections;
@@ -306,5 +339,26 @@ class Configuration implements ConfigurationInterface
 
 
         return $this;
+    }
+
+    public function amqpBindingNode()
+    {
+        $builder = new TreeBuilder();
+        $node = $builder->root('bind');
+
+        $node
+            ->useAttributeAsKey('source')
+            ->prototype('array')
+                ->prototype('scalar')->end()
+                ->beforeNormalization()
+                    ->ifString()->then(function ($v) { return [$v]; })
+                ->end()
+                ->beforeNormalization()
+                    ->ifArray()->then(function (array $v) { return empty($v) ? [''] : array_unique($v); })
+                ->end()
+            ->end()
+        ;
+
+        return $node;
     }
 }

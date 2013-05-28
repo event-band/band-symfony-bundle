@@ -43,5 +43,11 @@
             <argument /> <!-- queue -->
         </service>
 
+        <service id="event_band.transport.amqp.configurator"
+                class="EventBand\Transport\Amqp\AmqpConfigurator"
+                abstract="true">
+            <argument /> <!-- driver -->
+        </service>
+
     </services>
 </container>

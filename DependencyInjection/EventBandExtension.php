@@ -47,10 +47,17 @@ class EventBandExtension extends ConfigurableExtension
         $this->loadConsumers($mergedConfig['consumers'], $container);
     }
 
+    public function getConfiguration(array $config, ContainerBuilder $container)
+    {
+        $config = parent::getConfiguration($config, $container);
+        return $config;
+    }
+
+
     private function loadSerializers(array $config, ContainerBuilder $container)
     {
         foreach ($config as $name => $serializerConfig) {
-            $adapter = $serializerConfig['adapter'];
+            $adapter = $serializerConfig['type'];
             $parameters = $serializerConfig['parameters'];
 
             $serializer = new DefinitionDecorator(sprintf('event_band.serializer.adapter.%s', $adapter));
@@ -82,7 +89,7 @@ class EventBandExtension extends ConfigurableExtension
 
             switch ($type) {
                 case 'pattern':
-                    $router->replaceArgument(0, $parameters['pattern']);
+                    $router->replaceArgument(0, $parameters);
                     break;
 
                 default:
@@ -96,10 +103,10 @@ class EventBandExtension extends ConfigurableExtension
     private function loadPublishers(array $config, ContainerBuilder $container)
     {
         foreach ($config as $name => $publisherConfig) {
-            $adapter = $publisherConfig['adapter'];
-            $parameters = $publisherConfig['parameters'];
+            $transport = $publisherConfig['transport']['type'];
+            $parameters = $publisherConfig['transport']['parameters'];
 
-            switch ($adapter) {
+            switch ($transport) {
                 case 'amqp':
                     $publisher = new DefinitionDecorator('event_band.transport.amqp.publisher');
                     $publisher
@@ -139,9 +146,9 @@ class EventBandExtension extends ConfigurableExtension
     private function loadConsumers(array $config, ContainerBuilder $container)
     {
         foreach ($config as $name => $dispatcherConfig) {
-            $adapter = $dispatcherConfig['adapter'];
-            $parameters = $dispatcherConfig['parameters'];
-            switch ($adapter) {
+            $transport = $dispatcherConfig['transport']['type'];
+            $parameters = $dispatcherConfig['transport']['parameters'];
+            switch ($transport) {
                 case 'amqp':
                     $reader = new DefinitionDecorator('event_band.transport.amqp.consumer');
                     $reader

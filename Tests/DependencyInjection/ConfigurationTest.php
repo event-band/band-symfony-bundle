@@ -30,81 +30,24 @@ class ConfigurationTest extends TestCase
     }
 
     /**
-     * @test amqp.connections.%.exchanges with default values
+     * @test default sections are added
      */
-    public function amqpExchangesDefaultConfig()
+    public function defaultSections()
     {
-        $config = [
-            'transports' => [
-                'amqp' => [
-                    'connections' => [
-                        'default' => [
-                            'exchanges' => [
-                                'foo.bar' => []
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
-
-        $this->assertEquals(
-            [
-                'type' => 'topic',
-                'transient' => false,
-                'auto_delete' => false,
-                'internal' => false,
-                'bind' => []
-            ],
-            $this->processConfiguration([$config])['transports']['amqp']['connections']['default']['exchanges']['foo.bar']
-        );
+        $config = $this->processConfiguration(['transports' => ['amqp' => []]]);
+        $this->assertArrayHasKey('transports', $config);
+        $this->assertArrayHasKey('amqp', $config['transports']);
+        $this->assertNotEmpty($config['transports']['amqp']);
+        $this->assertArrayHasKey('serializers', $config);
+        $this->assertArrayHasKey('routers', $config);
+        $this->assertArrayHasKey('publishers', $config);
+        $this->assertArrayHasKey('consumers', $config);
     }
 
-    /**
-     * @test amqp.connections.%.exchanges.%.bindings formats
-     * @dataProvider bindings
-     */
-    public function amqpExchangesBindingsConfig($routingConfig, array $routingKeys)
-    {
-        $config = [
-            'transports' => [
-                'amqp' => [
-                    'connections' => [
-                        'default' => [
-                            'exchanges' => [
-                                'foo.bar' => [
-                                    'bind' => [
-                                        'bar.baz' => $routingConfig
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
-
-        $this->assertEquals(
-            $routingKeys,
-            $this->processConfiguration([$config])['transports']['amqp']['connections']['default']['exchanges']['foo.bar']['bind']['bar.baz']
-        );
-    }
-
-    public function bindings()
-    {
-        return [
-            ['', ['']],
-            [['foo', 'bar'], ['foo', 'bar']],
-            ['foo', ['foo']],
-            [[], ['']],
-            [['foo', 'foo'], ['foo']]
-        ];
-    }
-
-    private function processConfiguration(array $configs)
+    private function processConfiguration(array $config)
     {
         $processor = new Processor();
 
-        return $processor->processConfiguration($this->config, $configs);
+        return $processor->processConfiguration($this->config, ['event_band' => $config]);
     }
 }

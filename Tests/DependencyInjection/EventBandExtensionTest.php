@@ -36,8 +36,8 @@ class EventBandExtensionTest extends TestCase
     {
         $this->container = new ContainerBuilder(new ParameterBag([
             'kernel.bundles'          => array('FrameworkBundle' => 'Symfony\\Bundle\\FrameworkBundle\\FrameworkBundle'),
-            'kernel.cache_dir'        => __DIR__,
-            'kernel.compiled_classes' => array(),
+            'kernel.cache_dir'        => sys_get_temp_dir(),
+            'kernel.compiled_classes' => [],
             'kernel.debug'            => false,
             'kernel.environment'      => 'test',
             'kernel.name'             => 'kernel',

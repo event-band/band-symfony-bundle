@@ -33,6 +33,18 @@
             <argument /> <!-- persistent -->
             <argument /> <!-- mandatory -->
             <argument /> <!-- immediate -->
+            <argument /> <!-- logger -->
+        </service>
+
+        <service id="event_band.logger"
+                 class="EventBand\Bundle\Logger\MessageLogger">
+            <tag name="monolog.logger" channel="event_band" />
+            <argument type="service" id="logger" on-invalid="null" />
+        </service>
+
+        <service id="data_collector.event_band" class="EventBand\Bundle\Logger\MessageDataCollector">
+            <tag name="data_collector" template="EventBandBundle:Collector:messages.html.twig" id="event_band" />
+            <argument type="service" id="event_band.logger" />
         </service>
 
         <service id="event_band.transport.amqp.consumer"

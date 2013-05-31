@@ -1,0 +1,40 @@
+{% extends app.request.isXmlHttpRequest ? 'WebProfilerBundle:Profiler:ajax_layout.html.twig' : 'WebProfilerBundle:Profiler:layout.html.twig' %}
+
+{% block toolbar %}
+    {% set icon %}
+    <img width="20" height="28" alt="EventBand" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAcCAQAAACn1QXuAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDoAABSCAABFVgAADqXAAAXb9daH5AAAAFUSURBVHja5NUxSgNBFMbxB8uCCCEQ0gSWhUngXcAD/Btby1zAQrzBgo1gGk1OEEELCYt4AYsINpZeIVcIeIKxSKIz67ozxAiCvO7b4cfsezuzYmV3JX8bY7tKSBCEdJP8BMvJEBIGdH8HwzbWFKF5zYjT3WEWyzwOKzGYIGa5oh3G7hmQVLIFYyYsvex1tTNh6oQ3GNysRNlHKLyXMigpcydb1mElewjCkIKCgmOU3jfYZWhnd5UPIEVR0hpMWTjZQR226conl6F0PKxajxxtphnCWiimEXvjLBZLMCgXgakX9T1TskrfuiiTSs8MGc8e1/+KXaMo3Y9pDtdDGDtrnlCUnEN/byts5kQzDAZD6R2nnJGz5gWDocWDh52LFW/A255Ni2UYh3UiqMVqACEsZRBB9WOwWwx5w/MlBSdxN20PRdenNVghrIWhHXuRy//4Cb8PABKnlvnZF0vPAAAAAElFTkSuQmCC"/>
+    <span class="sf-toolbar-status">{{ collector.messagesCount }}</span>
+    {% endset %}
+    {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
+{% endblock %}
+
+{% block menu %}
+<span class="label">
+    <span class="icon"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAcCAQAAACn1QXuAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDoAABSCAABFVgAADqXAAAXb9daH5AAAAFUSURBVHja5NUxSgNBFMbxB8uCCCEQ0gSWhUngXcAD/Btby1zAQrzBgo1gGk1OEEELCYt4AYsINpZeIVcIeIKxSKIz67ozxAiCvO7b4cfsezuzYmV3JX8bY7tKSBCEdJP8BMvJEBIGdH8HwzbWFKF5zYjT3WEWyzwOKzGYIGa5oh3G7hmQVLIFYyYsvex1tTNh6oQ3GNysRNlHKLyXMigpcydb1mElewjCkIKCgmOU3jfYZWhnd5UPIEVR0hpMWTjZQR226conl6F0PKxajxxtphnCWiimEXvjLBZLMCgXgakX9T1TskrfuiiTSs8MGc8e1/+KXaMo3Y9pDtdDGDtrnlCUnEN/byts5kQzDAZD6R2nnJGz5gWDocWDh52LFW/A255Ni2UYh3UiqMVqACEsZRBB9WOwWwx5w/MlBSdxN20PRdenNVghrIWhHXuRy//4Cb8PABKnlvnZF0vPAAAAAElFTkSuQmCC" alt="" /></span>
+    <strong>Event Band</strong>
+    <span class="count">
+        <span>{{ collector.messagesCount }}</span>
+    </span>
+</span>
+{% endblock %}
+
+{% block panel %}
+
+    <h2>Messages</h2>
+
+    <ul class="alt">
+    {% for i, message in collector.messages %}
+        <li class="{{ cycle(["odd", "even"], i) }}">
+            <div>
+                <code>{{ message.body }}</code>
+            </div>
+            <small>
+                <strong>Exchange</strong>: {{ message.exchange }}<br />
+                <strong>Routing key</strong>: {{ message.routingKey }}<br />
+                <strong>Message ID</strong>: {{ message.messageId }}
+            </small>
+        </li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}

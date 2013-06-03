@@ -116,7 +116,7 @@ class AmqpConfigurationTest extends SectionConfigurationTestCase
     }
 
     /**
-     * @test connections.%.exchanges with default values
+     * @test connections..exchanges with default values
      */
     public function amqpExchangesDefaultConfig()
     {
@@ -139,6 +139,32 @@ class AmqpConfigurationTest extends SectionConfigurationTestCase
                 'bind' => []
             ],
             $this->processSection($config)['connections']['default']['exchanges']['foo.bar']
+        );
+    }
+
+    /**
+     * @test connections..queues with default values
+     */
+    public function amqQueuesDefaultConfig()
+    {
+        $config = [
+            'connections' => [
+                'default' => [
+                    'queues' => [
+                        'foo.bar' => []
+                    ]
+                ]
+            ]
+        ];
+
+        $this->assertEquals(
+            [
+                'transient' => false,
+                'auto_delete' => false,
+                'exclusive' => false,
+                'bind' => []
+            ],
+            $this->processSection($config)['connections']['default']['queues']['foo.bar']
         );
     }
 

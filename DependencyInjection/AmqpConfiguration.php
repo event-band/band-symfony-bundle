@@ -78,7 +78,7 @@ class AmqpConfiguration implements TransportSectionConfiguration
                                 ->useAttributeAsKey('name')
                                 ->prototype('array')
                                     ->children()
-                                        ->booleanNode('transient')->defaultTrue()->end()
+                                        ->booleanNode('transient')->defaultFalse()->end()
                                         ->booleanNode('auto_delete')->defaultFalse()->end()
                                         ->booleanNode('exclusive')->defaultFalse()->end()
                                     ->end()

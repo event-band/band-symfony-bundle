@@ -26,10 +26,6 @@
 
         <service id="event_band.serializer.adapter.native" class="EventBand\Serializer\NativeEventSerializer" public="false" />
 
-        <service id="event_band.serializer.adapter.jms" class="EventBand\Serializer\Jms\JmsEventContainerSerializer" public="false">
-            <argument type="service" id="jms_serializer" />
-            <argument /> <!-- format -->
-        </service>
         <service id="event_band.serializer.adapter.jms.handler" class="EventBand\Serializer\Jms\EventContainerHandler">
             <argument type="service">
                 <service class="EventBand\Serializer\Jms\SafeClassNamingStrategy" />

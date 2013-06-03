@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "a4342da9ce13d28160565b23cb9c5855",
+    "hash": "616524c00f0cd561a95f535e3b773206",
     "packages": [
         {
             "name": "che/console-signals",
@@ -130,12 +130,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chEbba/EventBand.git",
-                "reference": "b0edb043c450391b566ad5d907097a73595e0fc8"
+                "reference": "7ae9e5e0d9e47ec28b653e4a265baa0bcd34463e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chEbba/EventBand/zipball/b0edb043c450391b566ad5d907097a73595e0fc8",
-                "reference": "b0edb043c450391b566ad5d907097a73595e0fc8",
+                "url": "https://api.github.com/repos/chEbba/EventBand/zipball/7ae9e5e0d9e47ec28b653e4a265baa0bcd34463e",
+                "reference": "7ae9e5e0d9e47ec28b653e4a265baa0bcd34463e",
                 "shasum": ""
             },
             "require": {
@@ -173,7 +173,7 @@
                 "message",
                 "queue"
             ],
-            "time": "2013-05-28 13:18:18"
+            "time": "2013-05-28 15:56:49"
         },
         {
             "name": "event-band/symfony-adapter",
@@ -1504,12 +1504,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/JMSSerializerBundle.git",
-                "reference": "ab2ca253c3e2fb12dfbe3f1048224661ebf25494"
+                "reference": "bc4c8ddf89c1daba6d24d696e261e088677f49af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSSerializerBundle/zipball/ab2ca253c3e2fb12dfbe3f1048224661ebf25494",
-                "reference": "ab2ca253c3e2fb12dfbe3f1048224661ebf25494",
+                "url": "https://api.github.com/repos/schmittjoh/JMSSerializerBundle/zipball/bc4c8ddf89c1daba6d24d696e261e088677f49af",
+                "reference": "bc4c8ddf89c1daba6d24d696e261e088677f49af",
                 "shasum": ""
             },
             "require": {
@@ -1563,7 +1563,7 @@
                 "serialization",
                 "xml"
             ],
-            "time": "2013-03-14 09:30:30"
+            "time": "2013-05-29 14:42:59"
         },
         {
             "name": "phpcollection/phpcollection",

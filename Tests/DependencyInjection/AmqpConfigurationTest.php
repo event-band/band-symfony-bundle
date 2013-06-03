@@ -38,7 +38,10 @@ class AmqpConfigurationTest extends SectionConfigurationTestCase
                 ],
                 'converters' => [
                     'default' => [
-                        'serialize' => []
+                        'type' => 'serialize',
+                        'parameters' => [
+                            'serializer' => 'default'
+                        ]
                     ]
                 ]
             ],

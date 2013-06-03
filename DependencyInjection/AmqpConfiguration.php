@@ -100,22 +100,37 @@ class AmqpConfiguration implements TransportSectionConfiguration
                     ->end()
                 ->end()
                 ->arrayNode('converters')->info('Serialize converter with name "default" is added')
+                    ->defaultValue(['default' => ['type' => 'serialize', 'parameters' => ['serializer' => 'default']]])
                     ->useAttributeAsKey('name')
-                    ->addDefaultChildrenIfNoneSet('default')
                     ->prototype('array')
                         ->children()
                             ->arrayNode('serialize')
                                 ->addDefaultsIfNotSet()
-                                ->children() // TODO: add message prototype parameters
+                                ->children()
+                                    ->scalarNode('serializer')->defaultValue('default')->end()
+                                    // TODO: add message prototype parameters
                                 ->end()
                             ->end()
+                        ->end()
+                        ->validate()
+                            ->always()
+                            ->then(function ($converter) {
+                                if (count($converter) !== 1) {
+                                    throw new \InvalidArgumentException(sprintf(
+                                        'Expected only 1 converter type. Got %d: %s',
+                                        count($converter), implode(', ', array_keys($converter))
+                                    ));
+                                }
+
+                                return ['type' => key($converter), 'parameters' => current($converter)];
+                            })
                         ->end()
                     ->end()
                     ->validate()
                         ->always()
                         ->then(function ($router) {
                             if (!isset($router['default'])) {
-                                $router['default'] = ['type' => 'serialize', 'parameters' => []];
+                                $router['default'] = ['type' => 'serialize', 'parameters' => ['serializer' => 'default']];
                             }
 
                             return $router;

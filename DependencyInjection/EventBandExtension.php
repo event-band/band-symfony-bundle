@@ -188,7 +188,6 @@ class EventBandExtension extends ConfigurableExtension
                         ->replaceArgument(4, $parameters['persistent'])
                         ->replaceArgument(5, $parameters['mandatory'])
                         ->replaceArgument(6, $parameters['immediate'])
-                        ->replaceArgument(7, new Reference("event_band.logger"))
                     ;
                     $container->setDefinition(self::getPublisherId($name), $publisher);
                     break;

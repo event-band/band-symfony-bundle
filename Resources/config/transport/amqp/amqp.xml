@@ -36,17 +36,6 @@
             <argument /> <!-- logger -->
         </service>
 
-        <service id="event_band.logger"
-                 class="EventBand\Bundle\Logger\MessageLogger">
-            <tag name="monolog.logger" channel="event_band" />
-            <argument type="service" id="logger" on-invalid="null" />
-        </service>
-
-        <service id="data_collector.event_band" class="EventBand\Bundle\Logger\MessageDataCollector">
-            <tag name="data_collector" template="EventBandBundle:Collector:messages.html.twig" id="event_band" />
-            <argument type="service" id="event_band.logger" />
-        </service>
-
         <service id="event_band.transport.amqp.consumer"
                 class="EventBand\Transport\Amqp\AmqpConsumer"
                 abstract="true">
@@ -59,6 +48,15 @@
                 class="EventBand\Transport\Amqp\AmqpConfigurator"
                 abstract="true">
             <argument /> <!-- driver -->
+        </service>
+
+        <service id="event_band.transport.amqp.tracer" class="EventBand\Bundle\DataCollector\PublicationInterceptor">
+            <tag name="jms_aop.pointcut" interceptor="event_band.transport.amqp.tracer" />
+        </service>
+
+        <service id="data_collector.event_band_amqp" class="EventBand\Bundle\DataCollector\AmqpDataCollector">
+            <argument type="service" id="event_band.transport.amqp.tracer" />
+            <tag name="data_collector" template="EventBandBundle:Collector:messages.html.twig" id="event_band_amqp" />
         </service>
 
     </services>

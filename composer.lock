@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "616524c00f0cd561a95f535e3b773206",
+    "hash": "a7e6f9e6dad0e803b470c8ee99c4f869",
     "packages": [
         {
             "name": "che/console-signals",

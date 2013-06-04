@@ -30,13 +30,15 @@
         "che/console-signals": "dev-master",
         "event-band/amqplib-transport": "dev-master",
         "event-band/jms-serializer": "dev-master",
-        "jms/serializer-bundle": "0.12.*@dev"
+        "jms/serializer-bundle": "0.12.*@dev",
+        "jms/aop-bundle": "1.*"
     },
     "suggest": {
         "event-band/amqplib-transport": "Use amqp transport with amqp-lib",
         "event-band/pecl-amqp-transport": "Use amqp transport with pecl amqp extension",
         "event-band/jms-serializer": "Serialize events with jms (jms/serializer-bundle is required)",
         "jms/serializer-bundle": "Required to use with event-band/jms-serializer",
-        "jmikola/wildcard-event-dispatcher-bundle": "Simple publisher event configuration with wildcards"
+        "jmikola/wildcard-event-dispatcher-bundle": "Simple publisher event configuration with wildcards",
+        "jms/aop-bundle": "Required for amqp publication data collect"
     }
 }

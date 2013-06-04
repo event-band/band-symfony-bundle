@@ -56,7 +56,7 @@
 
         <service id="data_collector.event_band_amqp" class="EventBand\Bundle\DataCollector\AmqpDataCollector">
             <argument type="service" id="event_band.transport.amqp.tracer" />
-            <tag name="data_collector" template="EventBandBundle:Collector:messages.html.twig" id="event_band_amqp" />
+            <tag name="data_collector" template="EventBandBundle:Collector:amqp" id="event_band_amqp" />
         </service>
 
     </services>

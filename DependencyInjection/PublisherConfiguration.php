@@ -54,7 +54,7 @@ class PublisherConfiguration implements SectionConfiguration
                     ->end()
                 ->end()
                 ->booleanNode('propagation')->defaultTrue()->end()
-                ->integerNode('priority')->defaultValue(1024)->end()
+                ->scalarNode('priority')->defaultValue(1024)->end()
             ->end()
         ;
 

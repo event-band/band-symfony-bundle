@@ -16,6 +16,8 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  */
 class PublisherConfiguration implements SectionConfiguration
 {
+    const SUBSCRIBER_DEFAULT_PRIORITY = 1024;
+
     private $transportSections;
 
     /**
@@ -54,7 +56,7 @@ class PublisherConfiguration implements SectionConfiguration
                     ->end()
                 ->end()
                 ->booleanNode('propagation')->defaultTrue()->end()
-                ->scalarNode('priority')->defaultValue(1024)->end()
+                ->scalarNode('priority')->defaultValue(self::SUBSCRIBER_DEFAULT_PRIORITY)->end()
             ->end()
         ;
 

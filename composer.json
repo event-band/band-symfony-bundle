@@ -25,7 +25,7 @@
         "event-band/symfony-adapter": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*",
+        "phpunit/phpunit": "4.1.*",
         "event-band/symfony-adapter": "dev-master",
         "che/console-signals": "dev-master",
         "event-band/amqplib-transport": "dev-master",

@@ -50,14 +50,7 @@
             <argument /> <!-- driver -->
         </service>
 
-        <service id="event_band.transport.amqp.tracer" class="EventBand\Bundle\DataCollector\PublicationInterceptor">
-            <tag name="jms_aop.pointcut" interceptor="event_band.transport.amqp.tracer" />
-        </service>
 
-        <service id="data_collector.event_band_amqp" class="EventBand\Bundle\DataCollector\AmqpDataCollector">
-            <argument type="service" id="event_band.transport.amqp.tracer" />
-            <tag name="data_collector" template="EventBandBundle:Collector:amqp" id="event_band_amqp" />
-        </service>
-
+        <!-- tracer if AOP is present -->
     </services>
 </container>

@@ -54,6 +54,10 @@ class EventBandExtension extends ConfigurableExtension
         $this->loader->load('transport/amqp/amqp.xml');
         $this->loader->load(sprintf('transport/amqp/%s.xml', $config['driver']));
 
+        if (class_exists('JMS\AopBundle\JMSAopBundle')) {
+            $this->loader->load('transport/amqp/tracer.xml');
+        }
+
         $camelizeKey = function (array $config) {
             $camelized = [];
             foreach ($config as $key => $value) {

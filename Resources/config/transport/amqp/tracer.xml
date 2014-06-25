@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="event_band.transport.amqp.tracer" class="EventBand\Bundle\DataCollector\PublicationInterceptor">
+            <tag name="jms_aop.pointcut" interceptor="event_band.transport.amqp.tracer" />
+        </service>
+
+        <service id="data_collector.event_band_amqp" class="EventBand\Bundle\DataCollector\AmqpDataCollector">
+            <argument type="service" id="event_band.transport.amqp.tracer" />
+            <tag name="data_collector" template="EventBandBundle:Collector:amqp" id="event_band_amqp" />
+        </service>
+    </services>
+</container>

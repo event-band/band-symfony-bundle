@@ -20,11 +20,17 @@ class ReplaceDispatcherPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $dispatcher = $container->getDefinition('event_dispatcher');
-        $dispatcher->setPublic(false);
+        if ($container->hasAlias('event_dispatcher')) {
+            $container->setAlias('event_band.internal_dispatcher', $container->getAlias('event_dispatcher'));
+        } else {
+            $dispatcher = $container->getDefinition('event_dispatcher');
+            $dispatcher->setPublic(false);
 
-        $container->setDefinition('event_band.internal_dispatcher', $dispatcher);
+            $container->setDefinition('event_band.internal_dispatcher', $dispatcher);
+        }
+
         $container->setDefinition('event_dispatcher', $container->getDefinition('event_band.dispatcher'));
+
         $container->removeDefinition('event_band.dispatcher');
         $container->setAlias('event_band.dispatcher', 'event_dispatcher');
     }

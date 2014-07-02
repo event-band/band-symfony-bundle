@@ -55,8 +55,8 @@ class DispatcherConfigurator
                 foreach ($definitions as $definition) {
                     $subscription = new ListenerSubscription(
                         $event,
-                        function (Event $event) use ($definition) {
-                            return call_user_func([$this->container->get($definition[0]), $definition[1]], $event);
+                        function (Event $event, $eventName, EventDispatcherInterface $eventDispatcher) use ($definition) {
+                            return call_user_func([$this->container->get($definition[0]), $definition[1]], $event, $eventName, $eventDispatcher);
                         },
                         $this->eventDispatcher,
                         $band

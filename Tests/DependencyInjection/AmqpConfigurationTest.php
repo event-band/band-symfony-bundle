@@ -162,7 +162,8 @@ class AmqpConfigurationTest extends SectionConfigurationTestCase
                 'transient' => false,
                 'auto_delete' => false,
                 'exclusive' => false,
-                'bind' => []
+                'bind' => [],
+                'arguments' => null,
             ],
             $this->processSection($config)['connections']['default']['queues']['foo.bar']
         );

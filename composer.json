@@ -20,7 +20,7 @@
 
     "require": {
         "php": ">=5.4.1",
-        "symfony/framework-bundle": "2.*, >=2.1",
+        "symfony/framework-bundle": "2.*, >=2.5",
         "event-band/band-framework": "dev-master",
         "event-band/symfony-adapter": "dev-master"
     },

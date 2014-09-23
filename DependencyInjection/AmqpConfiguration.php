@@ -81,6 +81,7 @@ class AmqpConfiguration implements TransportSectionConfiguration
                                         ->booleanNode('transient')->defaultFalse()->end()
                                         ->booleanNode('auto_delete')->defaultFalse()->end()
                                         ->booleanNode('exclusive')->defaultFalse()->end()
+                                        ->variableNode('arguments')->defaultValue(null)->end()
                                     ->end()
                                     ->append($this->amqpBindingNode())
                                 ->end()

@@ -29,7 +29,6 @@ class EventBandBundle extends Bundle
     {
         $container->addCompilerPass(new SubscribeKernelListenerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION); // RegisterKernelListenersPass is registered on "BEFORE_REMOVING" since 2.3
         $container->addCompilerPass(new SubscribePass(), PassConfig::TYPE_AFTER_REMOVING);
-        $container->addCompilerPass(new ReplaceDispatcherPass(), PassConfig::TYPE_BEFORE_REMOVING);
 
         $container->addCompilerPass(new JmsEventConfigPass());
     }

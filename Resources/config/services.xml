@@ -10,8 +10,8 @@
 
     <services>
 
-        <service id="event_band.dispatcher" class="EventBand\Adapter\Symfony\BandEventDispatcher">
-            <argument type="service" id="event_band.internal_dispatcher" />
+        <service id="event_band.dispatcher" decorates="event_dispatcher" class="EventBand\Adapter\Symfony\BandEventDispatcher">
+            <argument type="service" id="event_band.dispatcher.inner" />
             <configurator service="event_band.dispatcher.configurator" method="configure" />
         </service>
         <service id="event_band.dispatcher.configurator" class="EventBand\Bundle\DispatcherConfigurator">

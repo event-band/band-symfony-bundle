@@ -22,7 +22,7 @@ class SubscribePass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $dispatcher = $container->getDefinition('event_dispatcher');
+        $dispatcher = $container->findDefinition('event_dispatcher');
 
         foreach ($container->findTaggedServiceIds('event_band.subscription') as $id => $subscriptions) {
             foreach ($subscriptions as $subscription) {

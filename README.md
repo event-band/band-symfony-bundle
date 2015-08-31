@@ -1,7 +1,7 @@
 EventBandSymfonyBundle
 ======================
 
-Symfony2 Bundle for EventBand framework
+Symfony2 Bundle for EventBand framework [![Build Status](https://travis-ci.org/event-band/band-symfony-bundle.svg?branch=master)](https://travis-ci.org/event-band/band-symfony-bundle)
 
 # Quick start
 ## Adding event-band to a symfony2 project

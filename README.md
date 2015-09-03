@@ -23,14 +23,18 @@ use EventBand\Adapter\Symfony\SerializableSymfonyEvent;
 
 class EchoEvent extends SerializableSymfonyEvent
 {
-    /** @var string **/
+    /**
+     * @var string
+     **/
     protected $message;
 
-    public function __construct($message){
+    public function __construct($message)
+    {
         $this->message = $message;
     }
 
-    public funciton getMessage(){
+    public funciton getMessage()
+    {
         return $this->message;
     }
     
@@ -40,6 +44,12 @@ class EchoEvent extends SerializableSymfonyEvent
         $array['message'] = $this->message;
 
         return $array;
+    }
+    
+    protected function fromUnserializedArray(array $data)
+    {
+        parent::fromUnserializedArray($data);
+        $this->message = $data['message'];
     }
 }
 ```
@@ -51,7 +61,8 @@ namespace Acme\EventBundle\Event;
 
 class EchoEventListener
 {
-    onEchoEvent(EchoEvent $event){
+    public function onEchoEvent(EchoEvent $event)
+    {
         // don't do such things on production
         echo $event->getMessage();
         echo "\n";
@@ -127,6 +138,8 @@ To use JMS Serializer add the folowing line to your composer.json
 and run `composer update event-band/jms-serializer` command.
 ### Creating an event
 ``` php
+<?php
+namespace Acme\EventBundle\Event;
 
 class EchoEvent implements \EventBand\Event
 {
@@ -136,7 +149,8 @@ class EchoEvent implements \EventBand\Event
      */
     private $data;
 
-    public function __construct($message){
+    public function __construct($message)
+    {
         $this->date['message'] = $message;
     }
 

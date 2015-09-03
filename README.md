@@ -7,17 +7,16 @@ Symfony2 Bundle for EventBand framework [![Build Status](https://travis-ci.org/e
 ## Adding event-band to a symfony2 project
 Add the following lines to your composer.json
 ```json
-"event-band/symfony-bundle": "dev-master",
-"event-band/amqplib-transport": "dev-master",
-"event-band/jms-serializer": "dev-master"
+"event-band/symfony-bundle": "~1.0",
+"event-band/amqplib-transport": "~1.0"
 ```
 
-then run the `composer update` command.
+then run the `composer update event-band/symfony-bundle event-band/amqplib-transport` command.
 
 ## Simple configuration
-### Creating event and listener
+### Creating an event
 Create an event, extending the EventBand\Adapter\Symfony\SerializableSymfonyEvent
-```php
+``` php
 <?php
 namespace Acme\EventBundle\Event;
 use EventBand\Adapter\Symfony\SerializableSymfonyEvent;
@@ -34,8 +33,17 @@ class EchoEvent extends SerializableSymfonyEvent
     public funciton getMessage(){
         return $this->message;
     }
+    
+    protected function toSerializableArray()
+    {
+        $array = parent::toSerializableArray();
+        $array['message'] = $this->message;
+
+        return $array;
+    }
 }
 ```
+### Creating a listener
 Then create a listener
 ```php
 <?php
@@ -52,7 +60,7 @@ class EchoEventListener
 ```
 And register listener in services.xml
 ```xml
-<service id="acme.event_bundle.event.event_listener" class="Acme\EventBundle\Event">
+<service id="acme.event_bundle.event.event_listener" class="Acme\EventBundle\EchoEventListener">
      <tag name="kernel.event_listener" event="event.echo" method="onEchoEvent"/>
 </service>
 ```
@@ -72,7 +80,7 @@ event_band:
 ### Adding band information to listener to make it asynchronous
 Add parameter "band" with name of consumer to event listener tag to show which consumer it belongs to.
 ```xml
-<service id="acme.event_bundle.event.event_listener" class="Acme\EventBundle\Event">
+<service id="acme.event_bundle.event.event_listener" class="Acme\EventBundle\EchoEventListener">
      <tag name="kernel.event_listener" event="event.echo" method="onEchoEvent" band="acme.echo.event"/>
 </service>
 ```
@@ -108,3 +116,34 @@ Hi, guys!
 ```
 ...
 Profit.
+
+## Using JMSSerializer
+### Adding dependencies
+If you use JMS Serializer, there is no need to extend event from any class.
+To use JMS Serializer add the folowing line to your composer.json
+``` json
+"event-band/jms-serializer": "~1.0"
+```
+and run `composer update event-band/jms-serializer` command.
+### Creating an event
+``` php
+
+class EchoEvent implements \EventBand\Event
+{
+    /**
+     * @var array
+     * @JMS\Serializer\Annotation\Type("array")
+     */
+    private $data;
+
+    public function __construct($message){
+        $this->date['message'] = $message;
+    }
+
+    public function getMessage()
+    {
+        return $this->data['message'];
+    }
+}
+```
+All the other settings are similar.

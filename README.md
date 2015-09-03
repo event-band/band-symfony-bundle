@@ -153,4 +153,12 @@ class EchoEvent implements \EventBand\Event
     }
 }
 ```
+### Config
+Add the following lines under 'event_band' section in your config.yml
+```yml
+serializers:
+        serializer:
+            jms:
+                format: json
+```
 All the other settings are similar.

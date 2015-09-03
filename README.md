@@ -5,13 +5,11 @@ Symfony2 Bundle for EventBand framework [![Build Status](https://travis-ci.org/e
 
 # Quick start
 ## Adding event-band to a symfony2 project
-Add the following lines to your composer.json
-```json
-"event-band/symfony-bundle": "~1.0",
-"event-band/amqplib-transport": "~1.0"
+Run the following commands:
+``` bash
+$ composer require "event-band/symfony-bundle:~1.0"
+$ composer require "event-band/amqplib-transport:~1.0"
 ```
-
-then run the `composer update event-band/symfony-bundle event-band/amqplib-transport` command.
 
 ## Simple configuration
 ### Creating an event
@@ -130,12 +128,7 @@ Profit.
 
 ## Using JMSSerializer
 ### Adding dependencies
-If you use JMS Serializer, there is no need to extend event from any class.
-To use JMS Serializer add the folowing line to your composer.json
-``` json
-"event-band/jms-serializer": "~1.0"
-```
-and run `composer update event-band/jms-serializer` command.
+Run `composer require "event-band/jms-serializer:~1.0"` command
 ### Creating an event
 ``` php
 <?php

@@ -16,11 +16,18 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 class AmqpConfiguration implements TransportSectionConfiguration
 {
     private static $DEFAULT_CONNECTION = [
-        'host' => 'localhost',
-        'port' => '5672',
-        'virtual_host' => '/',
-        'user' => 'guest',
-        'password' => 'guest',
+        'connection' => [
+            'servers' => [
+                [
+                    'host' => 'localhost',
+                    'port' => '5672',
+                    'virtual_host' => '/',
+                    'user' => 'guest',
+                    'password' => 'guest',
+                ]
+            ],
+            'strategy' => 'RoundRobin',
+        ],
         'exchanges' => [],
         'queues' => []
     ];
@@ -52,11 +59,26 @@ class AmqpConfiguration implements TransportSectionConfiguration
                     ->addDefaultChildrenIfNoneSet('default')
                     ->prototype('array')
                         ->children()
-                            ->scalarNode('host')->defaultValue(self::$DEFAULT_CONNECTION['host'])->end()
-                            ->scalarNode('port')->defaultValue(self::$DEFAULT_CONNECTION['port'])->end()
-                            ->scalarNode('virtual_host')->defaultValue(self::$DEFAULT_CONNECTION['virtual_host'])->end()
-                            ->scalarNode('user')->defaultValue(self::$DEFAULT_CONNECTION['user'])->end()
-                            ->scalarNode('password')->defaultValue(self::$DEFAULT_CONNECTION['password'])->end()
+                            ->arrayNode('connection')
+                                ->addDefaultsIfNotSet()
+                                ->children()
+                                    ->arrayNode('servers')
+                                        ->requiresAtLeastOneElement()
+                                        ->addDefaultChildrenIfNoneSet(0)
+                                        ->prototype('array')
+                                            ->children()
+                                                ->scalarNode('host')->defaultValue(self::$DEFAULT_CONNECTION['connection']['servers'][0]['host'])->end()
+                                                ->scalarNode('port')->defaultValue(self::$DEFAULT_CONNECTION['connection']['servers'][0]['port'])->end()
+                                                ->scalarNode('virtual_host')->defaultValue(self::$DEFAULT_CONNECTION['connection']['servers'][0]['virtual_host'])->end()
+                                                ->scalarNode('user')->defaultValue(self::$DEFAULT_CONNECTION['connection']['servers'][0]['user'])->end()
+                                                ->scalarNode('password')->defaultValue(self::$DEFAULT_CONNECTION['connection']['servers'][0]['password'])->end()
+                                            ->end()
+                                        ->end()
+                                    ->end()
+                                    ->scalarNode('strategy')->defaultValue('RoundRobin')->end()
+                                ->end()
+                            ->end()
+
                             ->arrayNode('exchanges')
                                 ->useAttributeAsKey('name')
                                 ->prototype('array')

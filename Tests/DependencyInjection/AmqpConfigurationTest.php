@@ -56,20 +56,34 @@ class AmqpConfigurationTest extends SectionConfigurationTestCase
     {
         $connections = [
             'default' => [
-                'host' => 'def',
-                'port' => '100',
-                'virtual_host' => 'vh',
-                'user' => 'user',
-                'password' => 'pass',
+                'connection' => [
+                    'servers' => [
+                        [
+                            'host' => 'def',
+                            'port' => '100',
+                            'virtual_host' => 'vh',
+                            'user' => 'user',
+                            'password' => 'pass',
+                        ]
+                    ],
+                    'strategy' => 'RoundRobin',
+                ],
                 'exchanges' => [],
                 'queues' => []
             ],
             'foo' => [
-                'host' => 'foo',
-                'port' => '200',
-                'virtual_host' => 'vh_foo',
-                'user' => 'user_foo',
-                'password' => 'pass_foo',
+                'connection' => [
+                    'servers' => [
+                        [
+                            'host' => 'foo',
+                            'port' => '200',
+                            'virtual_host' => 'vh_foo',
+                            'user' => 'user_foo',
+                            'password' => 'pass_foo',
+                        ]
+                    ],
+                    'strategy' => 'RoundRobin',
+                ],
                 'exchanges' => [],
                 'queues' => []
             ]

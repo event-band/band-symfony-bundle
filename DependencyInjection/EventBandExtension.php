@@ -10,8 +10,10 @@
 namespace EventBand\Bundle\DependencyInjection;
 
 use EventBand\Bundle\DependencyInjection\Compiler\SerializerPass;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Reference;
@@ -67,15 +69,30 @@ class EventBandExtension extends ConfigurableExtension
             return $camelized;
         };
 
+        $camelizeKeyRecursive = function (array $config) use (&$camelizeKey) {
+            $camelized = [];
+            foreach ($config as $key => $value) {
+                if (is_array($value)) {
+                    $camelized[lcfirst(ContainerBuilder::camelize($key))] = $camelizeKey($value);
+                } else {
+                    $camelized[lcfirst(ContainerBuilder::camelize($key))] = $value;
+                }
+            }
+
+            return $camelized;
+        };
+
         $definitions = [];
         foreach ($config['connections'] as $name => $connectionConfig) {
             $exchanges = $connectionConfig['exchanges'];
             unset($connectionConfig['exchanges']);
             $queues = $connectionConfig['queues'];
             unset($connectionConfig['queues']);
+            $servers = $connectionConfig['connection']['servers'];
+            unset($connectionConfig['connection']['servers']);
 
             $amqp = new DefinitionDecorator('event_band.transport.amqp.definition');
-            $amqp->addMethodCall('connection', [$camelizeKey($connectionConfig)]);
+            $amqp->addMethodCall('connections', [$camelizeKeyRecursive($servers)]);
             foreach ($exchanges as $exchange => $exchangeConfig) {
                 $exchangeType = $exchangeConfig['type'];
                 unset($exchangeConfig['type']);
@@ -89,21 +106,42 @@ class EventBandExtension extends ConfigurableExtension
             $container->setDefinition($definitionId, $amqp);
             $definitions[$name] = $definitionId;
 
-            $connection = new DefinitionDecorator('event_band.transport.amqp.connection_definition');
-            $connection->setFactoryService($definitionId);
-            $connectionId = self::getAmqpConnectionDefinitionId($name);
-            $container->setDefinition($connectionId, $connection);
+            $driverPoolStrategy = new Definition('EventBand\Transport\AmqpLib\Pool\Strategy\StrategyInterface');
+            $driverPoolStrategy->setPublic(false);
+            $driverPoolStrategy->addArgument($connectionConfig['connection']['strategy']);
+            $driverPoolStrategy->setFactory([new Reference(sprintf('event_band.transport.amqp.driver.driver_pool.strategy_factory.%s', $config['driver'])), 'create']);
 
-            $factory = new DefinitionDecorator(sprintf('event_band.transport.amqp.connection_factory.%s', $config['driver']));
-            $factory->addMethodCall('setDefinition', [new Reference($connectionId)]);
-            $container->setDefinition(self::getAmqpLibConnectionFactoryId($name), $factory);
+            $driverPool = new DefinitionDecorator(sprintf('event_band.transport.amqp.driver.driver_pool.%s', $config['driver']));
+            $driverPool->replaceArgument(0, $driverPoolStrategy);
 
-            $driver = new DefinitionDecorator('event_band.transport.amqp.driver.'.$config['driver']);
-            $driver->replaceArgument(0, new Reference($this->getAmqpLibConnectionFactoryId($name)));
-            $container->setDefinition($this->getAmqpDriverId($name), $driver);
+            $container->setDefinition(self::getAmqpDriverPoolId($name), $driverPool);
+
+            foreach ($servers as $index => $server) {
+                $connection = new Definition('EventBand\Transport\Amqp\Definition\ConnectionDefinition');
+                $connection->setPublic(false);
+                $connection->addArgument($index);
+                $connection->setFactory([new Reference($definitionId), 'getConnection']);
+
+                $container->setDefinition(self::getAmqpConnectionDefinitionId($name, $index), $connection);
+
+                $factory = new DefinitionDecorator(sprintf('event_band.transport.amqp.connection_factory.%s', $config['driver']));
+                $factory->addMethodCall('setDefinition', [new Reference(self::getAmqpConnectionDefinitionId($name, $index))]);
+                $container->setDefinition(self::getAmqpLibConnectionFactoryId($name, $index), $factory);
+
+                $parent = $container->getDefinition('event_band.transport.amqp.driver.'.$config['driver']);
+
+                $driver = new DefinitionDecorator('event_band.transport.amqp.driver.'.$config['driver']);
+                $driver->setClass($parent->getClass());
+                $driver->replaceArgument(0, new Reference(self::getAmqpLibConnectionFactoryId($name, $index)));
+                $container->setDefinition(self::getAmqpDriverId($name, $index), $driver);
+
+                $driverPool->addMethodCall('addDriver', [$driver]);
+            }
+
+            $container->setAlias(self::getAmqpDriverId($name), new Alias(self::getAmqpDriverPoolId($name)));
 
             $configurator = new DefinitionDecorator('event_band.transport.amqp.configurator');
-            $configurator->replaceArgument(0, new Reference($this->getAmqpDriverId($name)));
+            $configurator->replaceArgument(0, new Reference(self::getAmqpDriverId($name)));
             $container->setDefinition(self::getTypedTransportConfiguratorId('amqp', $name), $configurator);
             $container->getDefinition(self::getTransportConfiguratorId())
                 ->addMethodCall('registerConfigurator', ['amqp.'.$name, new Reference(self::getTypedTransportConfiguratorId('amqp', $name))]);
@@ -287,13 +325,22 @@ class EventBandExtension extends ConfigurableExtension
         return sprintf('event_band.transport.%s.definition.%s', $type, $name);
     }
 
-    private static function getAmqpConnectionDefinitionId($name)
+    private static function getAmqpConnectionDefinitionId($name, $index)
     {
-        return sprintf('event_band.transport.amqp.connection_definition.%s', $name);
+        return sprintf('event_band.transport.amqp.connection_definition.%s.%d', $name, $index);
     }
 
-    public static function getAmqpDriverId($connectionName)
+    public static function getAmqpDriverPoolId($connectionName)
     {
+        return sprintf('event_band.transport.amqp.driver_pool.%s', $connectionName);
+    }
+
+    public static function getAmqpDriverId($connectionName, $index = null)
+    {
+        if ($index !== null) {
+            return sprintf('event_band.transport.amqp.connection_driver.%s.%d', $connectionName, $index);
+        }
+
         return sprintf('event_band.transport.amqp.connection_driver.%s', $connectionName);
     }
 
@@ -302,9 +349,9 @@ class EventBandExtension extends ConfigurableExtension
         return sprintf('event_band.transport.amqp.converter.%s', $name);
     }
 
-    private static function getAmqpLibConnectionFactoryId($name)
+    private static function getAmqpLibConnectionFactoryId($name, $index)
     {
-        return sprintf('event_band.transport.amqplib.connection_factory.%s', $name);
+        return sprintf('event_band.transport.amqplib.connection_factory.%s.%d', $name, $index);
     }
 
     public static function getTransportConfiguratorId()

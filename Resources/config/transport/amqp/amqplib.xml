@@ -13,9 +13,20 @@
         </service>
 
         <service id="event_band.transport.amqp.driver.amqplib"
-                class="EventBand\Transport\AmqpLib\AmqpLibDriver" public="false" abstract="true">
+                 class="EventBand\Transport\AmqpLib\AmqpLibDriver"
+                 public="false" abstract="true">
             <argument /> <!-- connection factory -->
         </service>
 
+        <service id="event_band.transport.amqp.driver.driver_pool.amqplib"
+                 class="EventBand\Transport\AmqpLib\Pool\AmqpLibDriverPool"
+                 public="false" abstract="true">
+            <argument /> <!-- connection strategy -->
+        </service>
+
+        <service id="event_band.transport.amqp.driver.driver_pool.strategy_factory.amqplib"
+                 class="EventBand\Transport\AmqpLib\Pool\Strategy\StrategyFactory"
+                 public="false">
+        </service>
     </services>
 </container>

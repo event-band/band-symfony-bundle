@@ -323,7 +323,7 @@ class EventBandExtensionTest extends TestCase
         $publisher = $this->container->get($id);
         $this->assertInstanceOf('EventBand\Transport\Amqp\AmqpPublisher', $publisher);
         $definition = $this->container->getDefinition($id);
-        $this->assertEquals(EventBandExtension::getAmqpDriverId('con1'), (string) $definition->getArgument(0));
+        $this->assertEquals(EventBandExtension::getAmqpDriverPoolId('con1'), (string) $definition->getArgument(0));
         $this->assertEquals(EventBandExtension::getAmqpConverterId('foo'), (string) $definition->getArgument(1));
         $this->assertEquals('test', $definition->getArgument(2));
         $this->assertEquals(EventBandExtension::getRouterId('router1'), $definition->getArgument(3));
@@ -404,7 +404,7 @@ class EventBandExtensionTest extends TestCase
         $consumer = $this->container->get($id);
         $this->assertInstanceOf('EventBand\Transport\Amqp\AmqpConsumer', $consumer);
         $definition = $this->container->getDefinition($id);
-        $this->assertEquals(EventBandExtension::getAmqpDriverId('con1'), (string) $definition->getArgument(0));
+        $this->assertEquals(EventBandExtension::getAmqpDriverPoolId('con1'), (string) $definition->getArgument(0));
         $this->assertEquals(EventBandExtension::getAmqpConverterId('foo'), (string) $definition->getArgument(1));
         $this->assertEquals('test', $definition->getArgument(2));
     }

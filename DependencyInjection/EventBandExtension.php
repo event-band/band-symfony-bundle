@@ -60,7 +60,7 @@ class EventBandExtension extends ConfigurableExtension
             $this->loader->load('transport/amqp/tracer.xml');
         }
 
-        $camelizeKey = function (array $config) use (&$camelizeKey) {
+        $camelizeKey = function (array $config) {
             $camelized = [];
             foreach ($config as $key => $value) {
                 $camelized[lcfirst(ContainerBuilder::camelize($key))] = $value;

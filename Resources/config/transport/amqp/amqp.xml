@@ -12,8 +12,7 @@
         </service>
         <service id="event_band.transport.amqp.connection_definition"
                 class="EventBand\Transport\Amqp\Definition\ConnectionDefinition"
-                abstract="true" public="false"
-                factory-method="connection"><!-- factory-service should be added -->
+                abstract="true" public="false"><!-- factory-service should be added -->
         </service>
 
         <service id="event_band.transport.amqp.converter.serialize"

@@ -45,7 +45,7 @@ class PublicationInterceptor implements PublicationTracer, MethodInterceptorInte
      */
     public function matchesMethod(\ReflectionMethod $method)
     {
-        return $method->getName() === 'publish';
+        return $method->name === 'publish';
     }
 
     /**

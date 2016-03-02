@@ -90,7 +90,7 @@ class EventBandExtension extends ConfigurableExtension
             $definitions[$name] = $definitionId;
 
             $connection = new DefinitionDecorator('event_band.transport.amqp.connection_definition');
-            $connection->setFactoryService($definitionId);
+            $connection->setFactory([new Reference($definitionId), 'connection']);
             $connectionId = self::getAmqpConnectionDefinitionId($name);
             $container->setDefinition($connectionId, $connection);
 

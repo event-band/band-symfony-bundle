@@ -38,15 +38,19 @@ class SetupCommandTest extends TestCase
         $kernel
             ->expects($this->any())
             ->method('getContainer')
-            ->will($this->returnValue($this->container))
-        ;
+            ->will($this->returnValue($this->container));
+        $kernel
+            ->expects($this->any())
+            ->method('getBundles')
+            ->will($this->returnValue([]));
+
         $this->application = new Application($kernel);
         $this->application->add(new SetupCommand());
         $this->tester = new CommandTester($this->application->get('event-band:setup'));
     }
 
     /**
-     * @test definition parameter format ""|"type"|"type:name" will find definitions and pass to configurator
+     * @test         definition parameter format ""|"type"|"type:name" will find definitions and pass to configurator
      * @dataProvider definitions
      */
     public function definitionConfigurator($name, $definitions)
@@ -55,25 +59,27 @@ class SetupCommandTest extends TestCase
         $configurator
             ->expects($this->once())
             ->method('setUpDefinition')
-            ->with($definitions)
-        ;
+            ->with($definitions);
 
         $this->container
             ->expects($this->any())
             ->method('get')
-            ->will($this->returnCallback(function ($id) use ($configurator) {
-                if ($id === EventBandExtension::getTransportConfiguratorId()) {
-                    return $configurator;
-                }
-                return 'object_'.$id;
-            }))
-        ;
+            ->will(
+                $this->returnCallback(
+                    function ($id) use ($configurator) {
+                        if ($id === EventBandExtension::getTransportConfiguratorId()) {
+                            return $configurator;
+                        }
+
+                        return 'object_'.$id;
+                    }
+                )
+            );
         $this->container
             ->expects($this->once())
             ->method('getParameter')
             ->with('event_band.transport_definitions')
-            ->will($this->returnValue(['test' => ['name1' => 'id1', 'name2' => 'id2']]))
-        ;
+            ->will($this->returnValue(['test' => ['name1' => 'id1', 'name2' => 'id2']]));
 
         $this->tester->execute(['command' => 'event-band:setup', 'definition' => $name]);
     }

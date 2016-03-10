@@ -213,8 +213,10 @@ class EventBandExtensionTest extends TestCase
 
         // Test no serializer configs are loaded
         $resources = $this->container->getResources();
-        /** @var FileResource $resource */
         foreach ($resources as $resource) {
+            if (!$resource instanceof FileResource){
+                continue;
+            }
             $this->assertNotContains('EventBand/SymfonyBundle/Resources/config/serializer/', $resource->getResource());
         }
     }

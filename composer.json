@@ -22,7 +22,7 @@
         "php": ">=5.5",
 
         "event-band/band-framework": "~1.0",
-        "event-band/symfony-adapter": "~1.0",
+        "event-band/symfony-adapter": "~1.1.0",
 
         "symfony/framework-bundle": "~3.0, >=2.7"
     },

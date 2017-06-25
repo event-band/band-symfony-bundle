@@ -14,9 +14,11 @@
             <argument type="service" id="event_band.dispatcher.inner" />
             <configurator service="event_band.dispatcher.configurator" method="configure" />
         </service>
+        <service id="event_band.subscription_factory" class="EventBand\Bundle\SubscriptionFactory"/>
         <service id="event_band.dispatcher.configurator" class="EventBand\Bundle\DispatcherConfigurator">
             <argument type="service" id="service_container" />
             <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="event_band.subscription_factory"/>
         </service>
 
         <service id="event_band.publish_listener" class="EventBand\PublishEventSubscriber" public="true" abstract="true">

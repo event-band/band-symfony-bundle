@@ -21,11 +21,20 @@ class DispatcherConfigurator
     private $container;
     private $eventDispatcher;
     private $listeners = [];
+    /**
+     * @var SubscriptionFactoryInterface
+     */
+    private $factory;
 
-    public function __construct(ContainerInterface $container, EventDispatcherInterface $eventDispatcher)
+    public function __construct(
+        ContainerInterface $container,
+        EventDispatcherInterface $eventDispatcher,
+        SubscriptionFactoryInterface $factory
+    )
     {
         $this->container = $container;
         $this->eventDispatcher = $eventDispatcher;
+        $this->factory = $factory;
     }
 
     public function addListenerService($id, $event, $method = null, $band = null, $priority = 0)
@@ -53,7 +62,7 @@ class DispatcherConfigurator
         foreach ($this->listeners as $band => $events) {
             foreach ($events as $event => $definitions) {
                 foreach ($definitions as $definition) {
-                    $subscription = new ListenerSubscription(
+                    $subscription = $this->factory->create(
                         $event,
                         function (Event $event, $eventName, EventDispatcherInterface $eventDispatcher) use ($definition) {
                             return call_user_func([$this->container->get($definition[0]), $definition[1]], $event, $eventName, $eventDispatcher);

@@ -19,23 +19,30 @@
     "target-dir": "EventBand/Bundle",
 
     "require": {
-        "php": ">=5.4.1",
-        "symfony/framework-bundle": "2.*, >=2.5",
-        "event-band/band-framework": "dev-master",
-        "event-band/symfony-adapter": "0.1.x-dev"
+        "php": ">=5.5",
+
+        "event-band/band-framework": "~1.0",
+        "event-band/symfony-adapter": "~1.1.0||1.2.0-RC",
+
+        "symfony/framework-bundle": "~3.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.1.*",
-        "che/console-signals": "dev-master",
-        "event-band/amqplib-transport": "dev-master",
-        "event-band/jms-serializer": "dev-master",
-        "jms/serializer-bundle": "0.12.*@dev",
+        "phpunit/phpunit": "~4.8.0",
+
+        "che/console-signals": "~1.0@dev",
+
+        "event-band/symfony-adapter": "~1.0@dev",
+        "event-band/amqplib-transport": "~1.0@dev",
+        "event-band/jms-serializer": "~1.0@dev",
+
+        "jms/serializer-bundle": "1.1.*@dev",
         "jms/aop-bundle": "1.*"
     },
     "suggest": {
         "event-band/amqplib-transport": "Use amqp transport with amqp-lib",
         "event-band/pecl-amqp-transport": "Use amqp transport with pecl amqp extension",
         "event-band/jms-serializer": "Serialize events with jms (jms/serializer-bundle is required)",
+
         "jms/serializer-bundle": "Required to use with event-band/jms-serializer",
         "jmikola/wildcard-event-dispatcher-bundle": "Simple publisher event configuration with wildcards",
         "jms/aop-bundle": "Required for amqp publication data collect"

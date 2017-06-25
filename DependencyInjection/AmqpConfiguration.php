@@ -47,6 +47,7 @@ class AmqpConfiguration implements TransportSectionConfiguration
             ->addDefaultsIfNotSet()
             ->children()
                 ->enumNode('driver')->values(['amqplib', 'pecl'])->defaultValue('amqplib')->end()
+                ->booleanNode('use_tracer_interceptor')->defaultFalse()->end()
                 ->arrayNode('connections')->info('Connection with name "default" is added')
                     ->useAttributeAsKey('name')
                     ->addDefaultChildrenIfNoneSet('default')

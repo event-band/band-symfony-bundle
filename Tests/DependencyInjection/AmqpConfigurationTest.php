@@ -33,6 +33,7 @@ class AmqpConfigurationTest extends SectionConfigurationTestCase
         $this->assertEquals(
             [
                 'driver' => 'amqplib',
+                'use_tracer_interceptor' => false,
                 'connections' => [
                     'default' => AmqpConfiguration::getDefaultConnection()
                 ],

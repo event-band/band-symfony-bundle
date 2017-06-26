@@ -10,28 +10,35 @@
             "name": "Kirill chEbba Chebunin",
             "email": "iam@chebba.org",
             "homepage": "http://github.com/chEbba"
+        },
+        {
+            "name": "Vasil coylOne Kulakov",
+            "email": "kulakov@vasiliy.pro",
+            "homepage": "http://github.com/coyl"
         }
     ],
 
     "autoload": {
-        "psr-0": { "EventBand\\Bundle": "" }
+        "psr-4": {
+            "EventBand\\Bundle\\": "Bundle",
+            "EventBand\\Adapter\\Symfony\\": "Adapter"
+        }
     },
-    "target-dir": "EventBand/Bundle",
 
     "require": {
         "php": ">=5.5",
 
-        "event-band/band-framework": "~1.0",
-        "event-band/symfony-adapter": "~1.2.0",
-
-        "symfony/framework-bundle": "~3.2"
+        "event-band/band-framework": "~1.1.2",
+        "symfony/framework-bundle": "~3.2",
+        "che/console-signals": "~1.0",
+        "symfony/event-dispatcher": "~2.1 || ~3.0",
+        "symfony/console": "~2.1 || ~3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.8.0",
 
         "che/console-signals": "~1.0@dev",
 
-        "event-band/symfony-adapter": "~1.0@dev",
         "event-band/amqplib-transport": "~1.0@dev",
         "event-band/jms-serializer": "~1.0@dev",
 

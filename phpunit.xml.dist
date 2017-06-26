@@ -9,12 +9,15 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="./Tests/bootstrap.php"
+         bootstrap="./pu_bootstrap.php"
 >
 
     <testsuites>
         <testsuite name="EventBand Symfony Bundle Test Suite">
-            <directory>./Tests</directory>
+            <directory>./Bundle/Tests</directory>
+        </testsuite>
+        <testsuite name="EventBand Symfony Adapter Test Suite">
+            <directory>./Adapter/tests</directory>
         </testsuite>
     </testsuites>
 

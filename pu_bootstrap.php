@@ -7,4 +7,4 @@
  * with this package in the file LICENSE.
  */
 /** @var $loader \Composer\Autoload\ClassLoader */
-$loader = include __DIR__ . '/../vendor/autoload.php';
+$loader = include __DIR__ . '/vendor/autoload.php';

@@ -1,6 +1,8 @@
 <?php
 /**
- * @LICENSE_TEXT
+ * This file is a part of the Event-Band project
+ * @author Kirill chebba Chebunin
+ * @author Vasil coylOne Kulakov <kulakov@vasiliy.pro>
  */
 
 namespace EventBand\Adapter\Symfony;

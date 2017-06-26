@@ -24,7 +24,6 @@
             "EventBand\\Adapter\\Symfony\\": "Adapter"
         }
     },
-    "target-dir": "EventBand/Bundle",
 
     "require": {
         "php": ">=5.5",

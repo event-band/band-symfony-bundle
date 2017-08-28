@@ -11,6 +11,7 @@ use Che\ConsoleSignals\SignaledCommand;
 use EventBand\BandDispatcher;
 use EventBand\CallbackSubscription;
 use EventBand\Processor\Control\EventLimiter;
+use EventBand\Processor\Control\TimeLimiter;
 use EventBand\Processor\DispatchProcessor;
 use EventBand\Processor\DispatchStopEvent;
 use EventBand\Processor\DispatchTimeoutEvent;
@@ -28,6 +29,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class AbstractDispatchCommand extends SignaledCommand
 {
+    private $maxExecutionTime;
+    private $idleTimeout;
+    private $startTime;
+
     /**
      * @return BandDispatcher
      */
@@ -53,12 +58,13 @@ abstract class AbstractDispatchCommand extends SignaledCommand
 
     protected function configure()
     {
+        $this->startTime = time();
         parent::configure();
 
         $this
             ->addOption('timeout', 't', InputOption::VALUE_REQUIRED, 'Timeout to wait when no events exist', $this->getDefaultTimeout())
             ->addOption('events', null, InputOption::VALUE_REQUIRED, 'Limit of events to be dispatched', 0)
-            ->addOption('time', null, InputOption::VALUE_REQUIRED, 'Time limit for dispatching', 0)
+            ->addOption('max-execution-time', 'm', InputOption::VALUE_REQUIRED, 'Time limit for dispatching')
         ;
         if (!$this->getBandName()) {
             $this->addArgument('band', InputArgument::REQUIRED, 'Name of band');
@@ -68,26 +74,29 @@ abstract class AbstractDispatchCommand extends SignaledCommand
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $band = $this->getBandName() ?: $input->getArgument('band');
-        $timeout = $input->getOption('timeout');
+        $this->idleTimeout = $input->getOption('timeout');
+        $this->maxExecutionTime = $input->getOption('max-execution-time');
 
-        $processor = new DispatchProcessor($this->getDispatcher(), $this->getConsumer($band), $band, $timeout);
-        $this->configureControl($input);
+        $consumeTimeout = $this->maxExecutionTime ? min($this->idleTimeout, $this->maxExecutionTime) : $this->idleTimeout;
+
+        $processor = new DispatchProcessor($this->getDispatcher(), $this->getConsumer($band), $band, $consumeTimeout);
+        $this->configureControl($input, $processor);
 
         $processor->process();
     }
 
-    protected function configureControl(InputInterface $input)
+    protected function configureControl(InputInterface $input, DispatchProcessor $processor)
     {
         $dispatcher = $this->getDispatcher();
 
-
-         $time = $input->getOption('time');
-        // TODO: configure limiters
-        $signalCallback = function (StoppableDispatchEvent $event) {
-            if (!$this->isActive()) {
-                $event->stopDispatching();
-            }
-        };
+        if ($this->maxExecutionTime) {
+            $limiter = new TimeLimiter($this->maxExecutionTime);
+            $limiterCallback = function (DispatchStopEvent $event) use ($limiter, $processor) {
+                $timeLeft = $limiter->checkLimit($event);
+                $processor->setTimeout(min($this->idleTimeout, $timeLeft));
+            };
+            $dispatcher->subscribe(new CallbackSubscription(DispatchTimeoutEvent::name(), $limiterCallback));
+        }
 
         $events = $input->getOption('events');
         if ($events) {
@@ -98,6 +107,11 @@ abstract class AbstractDispatchCommand extends SignaledCommand
             $dispatcher->subscribe(new CallbackSubscription(DispatchStopEvent::name(), $limiterCallback));
         }
 
+        $signalCallback = function (StoppableDispatchEvent $event) {
+            if (!$this->isActive()) {
+                $event->stopDispatching();
+            }
+        };
         $dispatcher->subscribe(new CallbackSubscription(DispatchStopEvent::name(), $signalCallback));
         $dispatcher->subscribe(new CallbackSubscription(DispatchTimeoutEvent::name(), $signalCallback));
     }

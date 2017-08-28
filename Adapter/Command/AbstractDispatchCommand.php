@@ -31,7 +31,6 @@ abstract class AbstractDispatchCommand extends SignaledCommand
 {
     private $maxExecutionTime;
     private $idleTimeout;
-    private $startTime;
 
     /**
      * @return BandDispatcher
@@ -58,7 +57,6 @@ abstract class AbstractDispatchCommand extends SignaledCommand
 
     protected function configure()
     {
-        $this->startTime = time();
         parent::configure();
 
         $this

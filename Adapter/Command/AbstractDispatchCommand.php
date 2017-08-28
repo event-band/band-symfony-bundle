@@ -89,11 +89,12 @@ abstract class AbstractDispatchCommand extends SignaledCommand
 
         if ($this->maxExecutionTime) {
             $limiter = new TimeLimiter($this->maxExecutionTime);
-            $limiterCallback = function (DispatchStopEvent $event) use ($limiter, $processor) {
+            $limiterCallback = function (StoppableDispatchEvent $event) use ($limiter, $processor) {
                 $timeLeft = $limiter->checkLimit($event);
                 $processor->setTimeout(min($this->idleTimeout, $timeLeft));
             };
             $dispatcher->subscribe(new CallbackSubscription(DispatchTimeoutEvent::name(), $limiterCallback));
+            $dispatcher->subscribe(new CallbackSubscription(DispatchStopEvent::name(), $limiterCallback));
         }
 
         $events = $input->getOption('events');

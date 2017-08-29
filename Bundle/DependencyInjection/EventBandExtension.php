@@ -42,6 +42,8 @@ class EventBandExtension extends ConfigurableExtension
         foreach ($mergedConfig['transports'] as $name => $transportConfig) {
             $this->{'load'.ucfirst($name).'Transport'}($transportConfig, $container);
         }
+        $container->setParameter('event_band.default_max_execution_time', $mergedConfig['default_max_execution_time']);
+        $container->setParameter('event_band.default_idle_timeout', $mergedConfig['default_idle_timeout']);
 
         $this->loadSerializers($mergedConfig['serializers'], $container);
         $this->loadRouters($mergedConfig['routers'], $container);

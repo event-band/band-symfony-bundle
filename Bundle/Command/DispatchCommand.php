@@ -47,6 +47,16 @@ class DispatchCommand extends AbstractDispatchCommand
         $this->setName('event-band:dispatch');
     }
 
+    protected function getDefaultTimeout()
+    {
+        return $this->getContainer()->getParameter('event_band.default_idle_timeout');
+    }
+
+    protected function getDefaultMaxExecutionTime()
+    {
+        return $this->getContainer()->getParameter('event_band.default_max_execution_time');
+    }
+
     /**
      * @return \Symfony\Component\DependencyInjection\ContainerInterface
      */
@@ -60,6 +70,4 @@ class DispatchCommand extends AbstractDispatchCommand
 
         return $this->container;
     }
-
-
 }

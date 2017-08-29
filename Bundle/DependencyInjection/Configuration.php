@@ -43,6 +43,11 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $root = $treeBuilder->root('event_band');
 
+        $root->children()
+             ->scalarNode('default_idle_timeout')->defaultValue(60)->end()
+             ->scalarNode('default_max_execution_time')->defaultValue(null)->end()
+             ->end();
+
         $transports = $root->children()->arrayNode('transports')
             ->cannotBeEmpty()
             ->isRequired()

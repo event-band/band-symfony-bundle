@@ -30,7 +30,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 abstract class AbstractDispatchCommand extends SignaledCommand
 {
     private $maxExecutionTime;
-    private $idleTimeout;
 
     /**
      * @return BandDispatcher
@@ -55,6 +54,11 @@ abstract class AbstractDispatchCommand extends SignaledCommand
         return 60;
     }
 
+    protected function getDefaultMaxExecutionTime()
+    {
+        return null;
+    }
+
     protected function configure()
     {
         parent::configure();
@@ -62,7 +66,7 @@ abstract class AbstractDispatchCommand extends SignaledCommand
         $this
             ->addOption('timeout', 't', InputOption::VALUE_REQUIRED, 'Timeout to wait when no events exist', $this->getDefaultTimeout())
             ->addOption('events', null, InputOption::VALUE_REQUIRED, 'Limit of events to be dispatched', 0)
-            ->addOption('max-execution-time', 'm', InputOption::VALUE_REQUIRED, 'Time limit for dispatching')
+            ->addOption('max-execution-time', 'm', InputOption::VALUE_REQUIRED, 'Time limit for dispatching', $this->getDefaultMaxExecutionTime())
         ;
         if (!$this->getBandName()) {
             $this->addArgument('band', InputArgument::REQUIRED, 'Name of band');

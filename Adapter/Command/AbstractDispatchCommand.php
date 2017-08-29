@@ -72,12 +72,10 @@ abstract class AbstractDispatchCommand extends SignaledCommand
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $band = $this->getBandName() ?: $input->getArgument('band');
-        $this->idleTimeout = $input->getOption('timeout');
+        $idleTimeout = $input->getOption('timeout');
         $this->maxExecutionTime = $input->getOption('max-execution-time');
 
-        $consumeTimeout = $this->maxExecutionTime ? min($this->idleTimeout, $this->maxExecutionTime) : $this->idleTimeout;
-
-        $processor = new DispatchProcessor($this->getDispatcher(), $this->getConsumer($band), $band, $consumeTimeout);
+        $processor = new DispatchProcessor($this->getDispatcher(), $this->getConsumer($band), $band, $idleTimeout, $this->maxExecutionTime);
         $this->configureControl($input, $processor);
 
         $processor->process();
@@ -90,8 +88,7 @@ abstract class AbstractDispatchCommand extends SignaledCommand
         if ($this->maxExecutionTime) {
             $limiter = new TimeLimiter($this->maxExecutionTime);
             $limiterCallback = function (StoppableDispatchEvent $event) use ($limiter, $processor) {
-                $timeLeft = $limiter->checkLimit($event);
-                $processor->setTimeout(min($this->idleTimeout, $timeLeft));
+                $limiter->checkLimit($event);
             };
             $dispatcher->subscribe(new CallbackSubscription(DispatchTimeoutEvent::name(), $limiterCallback));
             $dispatcher->subscribe(new CallbackSubscription(DispatchStopEvent::name(), $limiterCallback));

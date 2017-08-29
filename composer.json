@@ -28,7 +28,7 @@
     "require": {
         "php": ">=5.5",
 
-        "event-band/band-framework": "~1.3",
+        "event-band/band-framework": "~2.0",
         "symfony/framework-bundle": "~2.7 || ~3.2",
         "che/console-signals": "~1.0",
         "symfony/event-dispatcher": "~2.1 || ~3.0",
@@ -39,7 +39,7 @@
 
         "che/console-signals": "~1.0@dev",
 
-        "event-band/amqplib-transport": "dev-master",
+        "event-band/amqplib-transport": "dev-feature/max-execution-time",
         "event-band/jms-serializer": "dev-master",
 
         "jms/serializer-bundle": "1.1.*@dev",

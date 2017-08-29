@@ -64,9 +64,9 @@ abstract class AbstractDispatchCommand extends SignaledCommand
         parent::configure();
 
         $this
-            ->addOption('timeout', 't', InputOption::VALUE_REQUIRED, 'Timeout to wait when no events exist', $this->getDefaultTimeout())
+            ->addOption('timeout', 't', InputOption::VALUE_REQUIRED, 'Timeout to wait when no events exist', null)
             ->addOption('events', null, InputOption::VALUE_REQUIRED, 'Limit of events to be dispatched', 0)
-            ->addOption('max-execution-time', 'm', InputOption::VALUE_REQUIRED, 'Time limit for dispatching', $this->getDefaultMaxExecutionTime())
+            ->addOption('max-execution-time', 'm', InputOption::VALUE_REQUIRED, 'Time limit for dispatching', null)
         ;
         if (!$this->getBandName()) {
             $this->addArgument('band', InputArgument::REQUIRED, 'Name of band');
@@ -76,8 +76,8 @@ abstract class AbstractDispatchCommand extends SignaledCommand
     protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $band = $this->getBandName() ?: $input->getArgument('band');
-        $idleTimeout = $input->getOption('timeout');
-        $this->maxExecutionTime = $input->getOption('max-execution-time');
+        $idleTimeout = $input->getOption('timeout')?:$this->getDefaultTimeout();
+        $this->maxExecutionTime = $input->getOption('max-execution-time')?:$this->getDefaultMaxExecutionTime();
 
         $processor = new DispatchProcessor($this->getDispatcher(), $this->getConsumer($band), $band, $idleTimeout, $this->maxExecutionTime);
         $this->configureControl($input, $processor);

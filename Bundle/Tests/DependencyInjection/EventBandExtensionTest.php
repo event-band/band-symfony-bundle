@@ -13,7 +13,6 @@ use EventBand\Transport\Amqp\Definition\ExchangeDefinition;
 use EventBand\Transport\Amqp\Definition\ExchangeType;
 use EventBand\Transport\Amqp\Definition\QueueDefinition;
 use EventBand\Transport\DelegatingTransportConfigurator;
-use JMS\SerializerBundle\DependencyInjection\JMSSerializerExtension;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\FrameworkExtension;
@@ -131,7 +130,22 @@ class EventBandExtensionTest extends TestCase
      */
     public function amqpConfigurator()
     {
-        $config = ['transports' => ['amqp' => ['connections' => ['foo' => []]]]];
+        $config = ['transports' => ['amqp' => ['connections' => ['foo' => [
+            'host'               => 'foo',
+            'port'               => 'foo',
+            'virtual_host'       => 'foo',
+            'user'               => 'foo',
+            'password'           => 'foo',
+            'insist'             => true,
+            'login_method'       => 'foo',
+            'login_response'     => 'foo',
+            'locale'             => 'foo',
+            'connection_timeout' => 'foo',
+            'read_write_timeout' => 'foo',
+            'context'            => 'foo',
+            'keepalive'          => true,
+            'heartbeat'          => 'foo',
+        ]]]]];
 
         $this->loadExtension($config);
 

@@ -62,19 +62,4 @@ class AbstractDispatchCommandTest extends TestCase
         $this->assertFalse($this->command->getDefinition()->hasArgument('band'));
     }
 
-    /**
-     * @test override getTimeout set default option value
-     */
-    public function setTimeout()
-    {
-        $this->command
-            ->expects($this->any())
-            ->method('getDefaultTimeout')
-            ->will($this->returnValue(10))
-        ;
-
-        $this->command->__construct('dispatch');
-
-        $this->assertEquals(10, $this->command->getDefinition()->getOption('timeout')->getDefault());
-    }
 }

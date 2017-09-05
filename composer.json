@@ -39,7 +39,7 @@
 
         "che/console-signals": "~1.0@dev",
 
-        "event-band/amqplib-transport": "dev-feature/heartbeats",
+        "event-band/amqplib-transport": "dev-master",
         "event-band/jms-serializer": "dev-master",
 
         "jms/serializer-bundle": "1.1.*@dev",

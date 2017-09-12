@@ -40,18 +40,18 @@ class EventBandExtension extends ConfigurableExtension
         $this->loader->load('services.xml');
 
         foreach ($mergedConfig['transports'] as $name => $transportConfig) {
-            $this->{'load'.ucfirst($name).'Transport'}($transportConfig, $container);
+            $this->{'load'.ucfirst($name).'Transport'}($transportConfig, $container, $mergedConfig['logger_service']);
         }
         $container->setParameter('event_band.default_max_execution_time', $mergedConfig['default_max_execution_time']);
         $container->setParameter('event_band.default_idle_timeout', $mergedConfig['default_idle_timeout']);
 
         $this->loadSerializers($mergedConfig['serializers'], $container);
         $this->loadRouters($mergedConfig['routers'], $container);
-        $this->loadPublishers($mergedConfig['publishers'], $container);
-        $this->loadConsumers($mergedConfig['consumers'], $container);
+        $this->loadPublishers($mergedConfig['publishers'], $container, $mergedConfig['logger_service']);
+        $this->loadConsumers($mergedConfig['consumers'], $container, $mergedConfig['logger_service']);
     }
 
-    private function loadAmqpTransport(array $config, ContainerBuilder $container)
+    private function loadAmqpTransport(array $config, ContainerBuilder $container, $loggerServiceId)
     {
         $this->loader->load('transport/amqp/amqp.xml');
         $this->loader->load(sprintf('transport/amqp/%s.xml', $config['driver']));
@@ -106,6 +106,7 @@ class EventBandExtension extends ConfigurableExtension
 
             $configurator = new DefinitionDecorator('event_band.transport.amqp.configurator');
             $configurator->replaceArgument(0, new Reference($this->getAmqpDriverId($name)));
+            $configurator->replaceArgument(1, $loggerServiceId ? new Reference($loggerServiceId) : null);
             $container->setDefinition(self::getTypedTransportConfiguratorId('amqp', $name), $configurator);
             $container->getDefinition(self::getTransportConfiguratorId())
                 ->addMethodCall('registerConfigurator', ['amqp.'.$name, new Reference(self::getTypedTransportConfiguratorId('amqp', $name))]);
@@ -177,7 +178,7 @@ class EventBandExtension extends ConfigurableExtension
         }
     }
 
-    private function loadPublishers(array $config, ContainerBuilder $container)
+    private function loadPublishers(array $config, ContainerBuilder $container, $loggerServiceId)
     {
         foreach ($config as $name => $publisherConfig) {
             $transport = $publisherConfig['transport']['type'];
@@ -194,6 +195,7 @@ class EventBandExtension extends ConfigurableExtension
                         ->replaceArgument(4, $parameters['persistent'])
                         ->replaceArgument(5, $parameters['mandatory'])
                         ->replaceArgument(6, $parameters['immediate'])
+                        ->replaceArgument(7, $loggerServiceId ? new Reference($loggerServiceId) : null)
                     ;
                     $container->setDefinition(self::getPublisherId($name), $publisher);
                     break;
@@ -219,7 +221,7 @@ class EventBandExtension extends ConfigurableExtension
         }
     }
 
-    private function loadConsumers(array $config, ContainerBuilder $container)
+    private function loadConsumers(array $config, ContainerBuilder $container, $loggerServiceId)
     {
         foreach ($config as $name => $dispatcherConfig) {
             $transport = $dispatcherConfig['transport']['type'];
@@ -231,6 +233,7 @@ class EventBandExtension extends ConfigurableExtension
                         ->replaceArgument(0, new Reference(self::getAmqpDriverId($parameters['connection'])))
                         ->replaceArgument(1, new Reference(self::getAmqpConverterId($parameters['converter'])))
                         ->replaceArgument(2, $parameters['queue'])
+                        ->replaceArgument(3, $loggerServiceId ? new Reference($loggerServiceId) : null)
                     ;
                     $container->setDefinition(self::getConsumerId($name), $reader);
                     break;

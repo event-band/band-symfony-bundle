@@ -44,6 +44,7 @@ class Configuration implements ConfigurationInterface
         $root = $treeBuilder->root('event_band');
 
         $root->children()
+             ->scalarNode('logger_service')->defaultValue(null)->end()
              ->scalarNode('default_idle_timeout')->defaultValue(60)->end()
              ->scalarNode('default_max_execution_time')->defaultValue(null)->end()
              ->end();

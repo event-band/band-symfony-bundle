@@ -41,12 +41,14 @@
             <argument /> <!-- driver -->
             <argument /> <!-- converter -->
             <argument /> <!-- queue -->
+            <argument /> <!-- logger -->
         </service>
 
         <service id="event_band.transport.amqp.configurator"
                 class="EventBand\Transport\Amqp\AmqpConfigurator"
                 abstract="true">
             <argument /> <!-- driver -->
+            <argument /> <!-- logger -->
         </service>
 
 

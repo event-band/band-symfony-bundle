@@ -28,7 +28,7 @@
     "require": {
         "php": ">=7.0",
 
-        "event-band/band-framework": "~2.0 >=2.2.1",
+        "event-band/band-framework": "~2.0 >=2.2.2",
         "symfony/framework-bundle": "~2.7 | ~3.2",
         "symfony/event-dispatcher": "~2.1 | ~3.0",
         "symfony/console": "~2.1 | ~3.0"

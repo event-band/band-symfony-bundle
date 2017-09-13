@@ -7,7 +7,6 @@
 
 namespace EventBand\Adapter\Symfony\Command;
 
-use Che\ConsoleSignals\SignaledCommand;
 use EventBand\BandDispatcher;
 use EventBand\CallbackSubscription;
 use EventBand\Processor\Control\EventLimiter;

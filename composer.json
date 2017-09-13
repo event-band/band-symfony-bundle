@@ -29,21 +29,20 @@
         "php": ">=7.0",
 
         "event-band/band-framework": "~2.0 >=2.2.1",
-        "symfony/framework-bundle": "~2.7 || ~3.2",
-        "che/console-signals": "~1.0",
-        "symfony/event-dispatcher": "~2.1 || ~3.0",
-        "symfony/console": "~2.1 || ~3.0"
+        "symfony/framework-bundle": "~2.7 | ~3.2",
+        "symfony/event-dispatcher": "~2.1 | ~3.0",
+        "symfony/console": "~2.1 | ~3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.8.0",
-
-        "che/console-signals": "~1.0@dev",
 
         "event-band/amqplib-transport": "dev-master",
         "event-band/jms-serializer": "dev-master",
 
         "jms/serializer-bundle": "1.1.*@dev",
-        "jms/aop-bundle": "1.*"
+        "jms/aop-bundle": "1.*",
+        "symfony/console": "2.3.0 | ~3.0",
+        "symfony/process": "2.3.* | ~3.0"
     },
     "suggest": {
         "event-band/amqplib-transport": "Use amqp transport with amqp-lib",

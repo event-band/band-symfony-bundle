@@ -18,4 +18,6 @@ interface PublicationTracer
      * @return AmqpPublicationEntry[]
      */
     public function getLoggedPublications();
+
+    public function reset();
 }

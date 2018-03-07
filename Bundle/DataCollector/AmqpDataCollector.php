@@ -46,4 +46,10 @@ class AmqpDataCollector extends DataCollector
     {
         return "event_band_amqp";
     }
+
+    public function reset()
+    {
+        $this->data = [];
+        $this->logger->reset();
+    }
 }

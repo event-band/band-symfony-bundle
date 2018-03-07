@@ -47,7 +47,6 @@ class Configuration implements ConfigurationInterface
              ->end();
 
         $transports = $root->children()->arrayNode('transports')
-            ->cannotBeEmpty()
             ->isRequired()
             ->validate()
                 ->always(function ($transports) {

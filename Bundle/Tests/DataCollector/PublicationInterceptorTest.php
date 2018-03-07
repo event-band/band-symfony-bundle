@@ -10,7 +10,7 @@ namespace EventBand\Bundle\Tests\DataCollector;
 use CG\Proxy\MethodInvocation;
 use EventBand\Bundle\DataCollector\AmqpPublicationEntry;
 use EventBand\Bundle\DataCollector\PublicationInterceptor;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for PublicationInterceptor
@@ -37,7 +37,7 @@ class PublicationInterceptorTest extends TestCase
      */
     public function classMatcher()
     {
-        $driver = $this->getMock('EventBand\Transport\Amqp\Driver\AmqpDriver');
+        $driver = $this->createMock('EventBand\Transport\Amqp\Driver\AmqpDriver');
         $this->assertTrue($this->interceptor->matchesClass(new \ReflectionClass($driver)));
         $this->assertFalse($this->interceptor->matchesClass(new \ReflectionClass('ArrayObject')));
     }
@@ -47,7 +47,7 @@ class PublicationInterceptorTest extends TestCase
      */
     public function methodMatcher()
     {
-        $driver = $this->getMock('EventBand\Transport\Amqp\Driver\AmqpDriver');
+        $driver = $this->createMock('EventBand\Transport\Amqp\Driver\AmqpDriver');
         $method = new \ReflectionMethod($driver, 'publish');
         $this->assertTrue($this->interceptor->matchesMethod($method));
         $method = new \ReflectionMethod($driver, 'consume');
@@ -63,7 +63,7 @@ class PublicationInterceptorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $driver = $this->getMock('EventBand\Transport\Amqp\Driver\AmqpDriver');
+        $driver = $this->createMock('EventBand\Transport\Amqp\Driver\AmqpDriver');
         $driver
             ->expects($this->once())
             ->method('publish')

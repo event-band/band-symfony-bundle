@@ -99,6 +99,8 @@ class AmqpConfigurationTest extends SectionConfigurationTestCase
                 $this->fail('Valid driver failed');
             }
 
+            $this->assertTrue(true);
+
             return;
         }
 

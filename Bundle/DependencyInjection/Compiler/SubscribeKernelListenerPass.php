@@ -11,8 +11,6 @@ namespace EventBand\Bundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 /**
  * Description of AsyncEventListenerPass
@@ -50,10 +48,10 @@ class SubscribeKernelListenerPass implements CompilerPassInterface
                 }
 
                 if (!isset($event['method'])) {
-                    $event['method'] = 'on'.preg_replace(array(
-                        '/(?<=\b)[a-z]/ie',
-                        '/[^a-z0-9]/i'
-                    ), array('strtoupper("\\0")', ''), $event['event']);
+                    $event['method'] = 'on' . preg_replace(array(
+                            '/(?<=\b)[a-z]/ie',
+                            '/[^a-z0-9]/i'
+                        ), array('strtoupper("\\0")', ''), $event['event']);
                 }
 
                 $configurator->addMethodCall(

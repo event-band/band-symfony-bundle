@@ -9,7 +9,7 @@ namespace EventBand\Bundle\Tests\Command;
 
 use EventBand\Bundle\Command\SetupCommand;
 use EventBand\Bundle\DependencyInjection\EventBandExtension;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -35,8 +35,8 @@ class SetupCommandTest extends TestCase
      */
     protected function setUp()
     {
-        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $kernel = $this->getMock('Symfony\Component\HttpKernel\KernelInterface');
+        $this->container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $kernel = $this->createMock('Symfony\Component\HttpKernel\KernelInterface');
         $kernel
             ->expects($this->any())
             ->method('getContainer')
@@ -57,7 +57,7 @@ class SetupCommandTest extends TestCase
      */
     public function definitionConfigurator($name, $definitions)
     {
-        $configurator = $this->getMock('EventBand\Transport\TransportConfigurator');
+        $configurator = $this->createMock('EventBand\Transport\TransportConfigurator');
         $configurator
             ->expects($this->once())
             ->method('setUpDefinition')

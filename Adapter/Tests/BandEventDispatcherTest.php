@@ -11,7 +11,7 @@ use EventBand\Adapter\Symfony\BandEventDispatcher;
 use EventBand\Adapter\Symfony\ListenerSubscription;
 use EventBand\Adapter\Symfony\SymfonyEventWrapper;
 use EventBand\Subscription;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
 
 /**
@@ -33,7 +33,7 @@ class BandEventDispatcherTest extends TestCase
     protected function setUp()
     {
         $eventDispatcherInterface = 'Symfony\Component\EventDispatcher\EventDispatcherInterface';
-        $this->eventDispatcher = $this->getMock($eventDispatcherInterface, array_merge(get_class_methods($eventDispatcherInterface), ['additionalMethod']));
+        $this->eventDispatcher = $this->createMock($eventDispatcherInterface, array_merge(get_class_methods($eventDispatcherInterface), ['additionalMethod']));
         $this->bandDispatcher = new BandEventDispatcher($this->eventDispatcher, '~prefix~');
     }
 
@@ -42,7 +42,7 @@ class BandEventDispatcherTest extends TestCase
      */
     public function dispatchEventWithInternal()
     {
-        $event = $this->getMock('EventBand\Event');
+        $event = $this->createMock('EventBand\Event');
         $event
             ->expects($this->any())
             ->method('getName')
@@ -65,7 +65,7 @@ class BandEventDispatcherTest extends TestCase
      */
     public function dispatchEventWithBand()
     {
-        $event = $this->getMock('EventBand\Event');
+        $event = $this->createMock('EventBand\Event');
         $event
             ->expects($this->any())
             ->method('getName')
@@ -86,7 +86,7 @@ class BandEventDispatcherTest extends TestCase
      */
     public function dispatchEventPropagation()
     {
-        $event = $this->getMock('EventBand\Event');
+        $event = $this->createMock('EventBand\Event');
         $this->eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
@@ -103,7 +103,7 @@ class BandEventDispatcherTest extends TestCase
      */
     public function addAdapterListener()
     {
-        $subscription = $this->getMock('EventBand\Subscription');
+        $subscription = $this->createMock('EventBand\Subscription');
         $subscription
             ->expects($this->any())
             ->method('getEventName')
@@ -132,7 +132,7 @@ class BandEventDispatcherTest extends TestCase
      */
     public function removeWrapperListener()
     {
-        $subscription = $this->getMock('EventBand\Subscription');
+        $subscription = $this->createMock('EventBand\Subscription');
         $subscription
             ->expects($this->any())
             ->method('getEventName')
@@ -201,8 +201,8 @@ class BandEventDispatcherTest extends TestCase
      */
     public function subscriptionIterator()
     {
-        $subscription1 = $this->getMock('EventBand\Subscription');
-        $subscription2 = $this->getMock('EventBand\Subscription');
+        $subscription1 = $this->createMock('EventBand\Subscription');
+        $subscription2 = $this->createMock('EventBand\Subscription');
 
         $this->bandDispatcher->subscribe($subscription1);
         $this->bandDispatcher->subscribe($subscription2);
@@ -252,7 +252,7 @@ class BandEventDispatcherTest extends TestCase
      */
     public function subscriptionPriority()
     {
-        $subscription = $this->getMock('EventBand\Subscription');
+        $subscription = $this->createMock('EventBand\Subscription');
         $this->bandDispatcher->subscribe($subscription, 666);
 
         $this->assertEquals(666, $this->bandDispatcher->getSubscriptionPriority($subscription));
@@ -264,7 +264,7 @@ class BandEventDispatcherTest extends TestCase
      */
     public function unknownSubscriptionPriority()
     {
-        $this->bandDispatcher->getSubscriptionPriority($this->getMock('EventBand\Subscription'));
+        $this->bandDispatcher->getSubscriptionPriority($this->createMock('EventBand\Subscription'));
     }
 
     /**

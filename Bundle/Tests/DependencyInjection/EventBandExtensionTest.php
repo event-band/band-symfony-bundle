@@ -14,7 +14,7 @@ use EventBand\Transport\Amqp\Definition\ExchangeType;
 use EventBand\Transport\Amqp\Definition\QueueDefinition;
 use EventBand\Transport\DelegatingTransportConfigurator;
 use JMS\SerializerBundle\JMSSerializerBundle;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\FrameworkExtension;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

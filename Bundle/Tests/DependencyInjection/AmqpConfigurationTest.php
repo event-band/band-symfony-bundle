@@ -97,9 +97,9 @@ class AmqpConfigurationTest extends SectionConfigurationTestCase
         } catch (InvalidConfigurationException $e) {
             if ($valid) {
                 $this->fail('Valid driver failed');
+            } else {
+                $this->markTestSkipped();
             }
-
-            $this->assertTrue(true);
 
             return;
         }

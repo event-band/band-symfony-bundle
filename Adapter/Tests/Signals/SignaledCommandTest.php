@@ -6,7 +6,7 @@
 namespace EventBand\Adapter\Symfony\Tests\Signals;
 
 use EventBand\Adapter\Symfony\Command\SignaledCommand;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
 
 /**

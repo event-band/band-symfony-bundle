@@ -8,7 +8,7 @@
 namespace EventBand\Bundle\Tests\DependencyInjection;
 
 use EventBand\Bundle\DependencyInjection\SectionConfiguration;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Processor;
 

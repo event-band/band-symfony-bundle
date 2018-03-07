@@ -8,7 +8,7 @@
 namespace EventBand\Adapter\Symfony\Tests;
 
 use EventBand\Adapter\Symfony\Tests\Mock\SerializableEventStub;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class SerializableSymfonyEventTest

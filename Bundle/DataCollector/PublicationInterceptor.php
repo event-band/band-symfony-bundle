@@ -71,4 +71,9 @@ class PublicationInterceptor implements PublicationTracer, MethodInterceptorInte
     {
         return $this->entries;
     }
+
+    public function reset()
+    {
+        $this->entries = [];
+    }
 }

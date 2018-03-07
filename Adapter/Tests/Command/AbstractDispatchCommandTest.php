@@ -8,7 +8,7 @@
 namespace EventBand\Adapter\Symfony\Tests\Command;
 
 use EventBand\Adapter\Symfony\Command\AbstractDispatchCommand;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class AbstractDispatchCommandTest
@@ -32,7 +32,7 @@ class AbstractDispatchCommandTest extends TestCase
                 'getDefaultTimeout'
             ])
             ->disableOriginalConstructor()
-            ->getMock()
+            ->createMock()
         ;
     }
 

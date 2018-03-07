@@ -8,7 +8,7 @@
 namespace EventBand\Bundle\Tests\DataCollector;
 
 use EventBand\Bundle\DataCollector\AmqpDataCollector;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,7 +33,7 @@ class AmqpDataCollectorTest extends TestCase
      */
     protected function setUp()
     {
-        $this->tracer = $this->getMock('EventBand\Bundle\DataCollector\PublicationTracer');
+        $this->tracer = $this->createMock('EventBand\Bundle\DataCollector\PublicationTracer');
         $this->collector = new AmqpDataCollector($this->tracer);
     }
 

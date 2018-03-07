@@ -37,14 +37,14 @@ class ConsumerConfigurationTest extends SectionConfigurationTestCase
 
     protected function setUp()
     {
-        $this->transport1 = $this->getMock('EventBand\Bundle\DependencyInjection\TransportSectionConfiguration');
+        $this->transport1 = $this->createMock('EventBand\Bundle\DependencyInjection\TransportSectionConfiguration');
         $this->transport1
             ->expects($this->once())
             ->method('getConsumerNode')
             ->will($this->returnValue($this->root1 = (new TreeBuilder())->root('transport1')))
         ;
 
-        $this->transport2 = $this->getMock('EventBand\Bundle\DependencyInjection\TransportSectionConfiguration');
+        $this->transport2 = $this->createMock('EventBand\Bundle\DependencyInjection\TransportSectionConfiguration');
         $this->transport2
             ->expects($this->once())
             ->method('getConsumerNode')

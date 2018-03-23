@@ -40,5 +40,13 @@
         </service>
 
         <service id="event_band.transport_configurator" class="EventBand\Transport\DelegatingTransportConfigurator" />
+
+        <!-- commands for SF > 4.0 -->
+        <service id="event_band.command.setup" class="EventBand\Bundle\Command\SetupCommand" public="false">
+            <tag name="console.command" />
+        </service>
+        <service id="event_band.command.dispatch" class="EventBand\Bundle\Command\DispatchCommand" public="false">
+            <tag name="console.command" />
+        </service>
     </services>
 </container>
